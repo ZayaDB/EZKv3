@@ -1,0 +1,39 @@
+@font-face {
+  font-family: "Pretendard-Regular";
+  src: url("https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff")
+    format("woff");
+  font-weight: 400;
+  font-style: normal;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  .font-pretendard {
+    font-family: "Pretendard-Regular", "Noto Sans KR", sans-serif;
+  }
+  .animate-fadeIn {
+    animation: fadeIn 0.2s ease-in;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+html,
+body {
+  @apply font-pretendard text-gray-800 bg-white dark:text-gray-100 dark:bg-gray-900;
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+}
