@@ -4,9 +4,9 @@ import { useTranslation } from "react-i18next";
 import EnglandFlag from "../assets/england.svg";
 import KoreaFlag from "../assets/img_koreanFlag_02.jpg";
 import MongoliaFlag from "../assets/Flag_of_Mongolia.png";
+import { useNavigate } from "react-router-dom";
 
 const fontClass = "font-pretendard";
-const isLoggedIn = true;
 
 const LANGS = [
   { code: "en", label: "English", flag: EnglandFlag, aria: "English" },
@@ -16,12 +16,20 @@ const LANGS = [
 
 const Header: React.FC = () => {
   const { t, i18n } = useTranslation();
+  const navigate = useNavigate();
   const [lang, setLang] = useState(i18n.language || "ko");
   const [isDark, setIsDark] = useState(() =>
     document.documentElement.classList.contains("dark")
   );
   const [open, setOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("token"));
+
+  useEffect(() => {
+    const handleStorage = () => setIsLoggedIn(!!localStorage.getItem("token"));
+    window.addEventListener("storage", handleStorage);
+    return () => window.removeEventListener("storage", handleStorage);
+  }, []);
 
   const currentLang = LANGS.find((l) => l.code === lang) || LANGS[1];
 
@@ -164,7 +172,10 @@ const Header: React.FC = () => {
               <FaUserCircle />
             </a>
           ) : (
-            <button className="px-4 py-1 rounded-lg bg-blue-600 text-white font-semibold shadow hover:bg-blue-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-400">
+            <button
+              className="px-4 py-1 rounded-lg bg-blue-600 text-white font-semibold shadow hover:bg-blue-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-400"
+              onClick={() => navigate("/login")}
+            >
               {t("login")}
             </button>
           )}
