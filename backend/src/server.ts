@@ -8,10 +8,12 @@ dotenv.config();
 const app = express();
 app.use(
   cors({
-    origin: ["http://localhost:5173", "http://ezkorea.netlify.app/"],
+    origin: ["http://localhost:5173", "http://ezkorea.netlify.app"],
     credentials: true,
   })
 );
+// 모든 OPTIONS 요청 허용
+app.options("*", cors());
 app.use(express.json());
 
 mongoose
