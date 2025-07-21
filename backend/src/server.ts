@@ -7,27 +7,11 @@ dotenv.config();
 
 const app = express();
 
-// 임시로 모든 origin 허용 (개발 중)
-app.use(
-  cors({
-    origin: true, // 모든 origin 허용
-    credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
-  })
-);
+// CORS를 가장 먼저 적용
+app.use(cors());
 
-// 모든 OPTIONS 요청에 대해 명시적으로 응답
-app.options("*", (req, res) => {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Content-Type, Authorization, X-Requested-With"
-  );
-  res.header("Access-Control-Allow-Credentials", "true");
-  res.status(204).end();
-});
+// 모든 OPTIONS 요청 처리
+app.options("*", cors());
 
 app.use(express.json());
 
