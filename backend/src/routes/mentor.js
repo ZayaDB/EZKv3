@@ -225,4 +225,67 @@ router.get("/mentors", authenticateToken, requireAdmin, async (req, res) => {
   }
 });
 
+// 승인된 멘토 목록 조회
+router.get("/approved", async (req, res) => {
+  try {
+    const {
+      search,
+      specialization,
+      language,
+      minPrice,
+      maxPrice,
+      sortBy = "rating",
+      order = "desc",
+    } = req.query;
+
+    const query = { role: "mentor" };
+
+    // 검색
+    if (search) {
+      query.$or = [
+        { name: { $regex: search, $options: "i" } },
+        { "mentorInfo.specialization": { $regex: search, $options: "i" } },
+        { "mentorInfo.introduction": { $regex: search, $options: "i" } },
+      ];
+    }
+
+    // 전문분야 필터
+    if (specialization) {
+      query["mentorInfo.specialization"] = specialization;
+    }
+
+    // 언어 필터
+    if (language) {
+      query["mentorInfo.languages"] = { $regex: language, $options: "i" };
+    }
+
+    // 가격 필터
+    if (minPrice || maxPrice) {
+      query["mentorInfo.hourlyRate"] = {};
+      if (minPrice) query["mentorInfo.hourlyRate"].$gte = Number(minPrice);
+      if (maxPrice) query["mentorInfo.hourlyRate"].$lte = Number(maxPrice);
+    }
+
+    const sortOptions = {};
+    sortOptions[sortBy] = order === "desc" ? -1 : 1;
+
+    const mentors = await User.find(query)
+      .select("name email mentorInfo")
+      .sort(sortOptions)
+      .limit(50);
+
+    res.json({
+      success: true,
+      mentors,
+    });
+  } catch (error) {
+    console.error("승인된 멘토 목록 조회 오류:", error);
+    res.status(500).json({
+      success: false,
+      message: "멘토 목록 조회에 실패했습니다.",
+      error: error.message,
+    });
+  }
+});
+
 export default router;
