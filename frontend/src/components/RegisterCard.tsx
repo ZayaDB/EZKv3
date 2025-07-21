@@ -33,7 +33,7 @@ const RegisterCard: React.FC = () => {
       if (err.response && err.response.data && err.response.data.message) {
         setError(err.response.data.message);
       } else {
-        setError(t("registerError") || "회원가입에 실패했습니다.");
+        setError(t("registerError"));
       }
     }
   };
@@ -122,13 +122,13 @@ const RegisterCard: React.FC = () => {
         )}
         {success && (
           <div className="text-green-500 text-sm text-center mt-2">
-            {t("registerSuccess") || "회원가입이 완료되었습니다!"}
+            {t("registerSuccess")}
           </div>
         )}
       </form>
       {/* 이미 회원이신가요? */}
       <div className="text-center text-sm text-slate-600 dark:text-slate-300 mt-2">
-        {t("alreadyUser") || "이미 회원이신가요?"}
+        {t("alreadyUser")}
         <button
           className="ml-2 text-blue-600 dark:text-blue-400 font-semibold hover:underline"
           onClick={() => navigate("/login")}

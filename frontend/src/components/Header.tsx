@@ -1,10 +1,10 @@
 import React, { useState, useRef, useEffect } from "react";
 import { FaUserCircle } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
+import { useNavigate, Link } from "react-router-dom";
 import EnglandFlag from "../assets/england.svg";
 import KoreaFlag from "../assets/img_koreanFlag_02.jpg";
 import MongoliaFlag from "../assets/Flag_of_Mongolia.png";
-import { useNavigate } from "react-router-dom";
 
 const fontClass = "font-pretendard";
 
@@ -22,11 +22,27 @@ const Header: React.FC = () => {
     document.documentElement.classList.contains("dark")
   );
   const [open, setOpen] = useState(false);
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const userMenuRef = useRef<HTMLDivElement>(null);
   const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("token"));
+  const [user, setUser] = useState<any>(null);
 
   useEffect(() => {
-    const handleStorage = () => setIsLoggedIn(!!localStorage.getItem("token"));
+    const handleStorage = () => {
+      setIsLoggedIn(!!localStorage.getItem("token"));
+      const userData = localStorage.getItem("user");
+      if (userData) {
+        setUser(JSON.parse(userData));
+      }
+    };
+
+    // 초기 사용자 정보 로드
+    const userData = localStorage.getItem("user");
+    if (userData) {
+      setUser(JSON.parse(userData));
+    }
+
     window.addEventListener("storage", handleStorage);
     return () => window.removeEventListener("storage", handleStorage);
   }, []);
@@ -44,6 +60,17 @@ const Header: React.FC = () => {
     setIsDark(document.documentElement.classList.contains("dark"));
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    setIsLoggedIn(false);
+    setUser(null);
+    setUserMenuOpen(false);
+    navigate("/");
+    // 헤더 업데이트를 위한 이벤트 발생
+    window.dispatchEvent(new Event("storage"));
+  };
+
   // 드롭다운 외부 클릭 시 닫기
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -53,22 +80,31 @@ const Header: React.FC = () => {
       ) {
         setOpen(false);
       }
+      if (
+        userMenuRef.current &&
+        !userMenuRef.current.contains(event.target as Node)
+      ) {
+        setUserMenuOpen(false);
+      }
     }
-    if (open) {
+    if (open || userMenuOpen) {
       document.addEventListener("mousedown", handleClickOutside);
     } else {
       document.removeEventListener("mousedown", handleClickOutside);
     }
     return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [open]);
+  }, [open, userMenuOpen]);
 
   return (
     <header className={`w-full shadow-md ${fontClass}`}>
       <div className="container mx-auto flex items-center justify-between py-4 px-6">
         {/* 로고/서비스명 */}
-        <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">
+        <Link
+          to="/"
+          className="text-2xl font-bold text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors duration-200 cursor-pointer"
+        >
           {t("title")}
-        </div>
+        </Link>
         {/* 네비게이션 메뉴 */}
         <nav className="flex gap-6">
           <a
@@ -165,12 +201,48 @@ const Header: React.FC = () => {
             />
           </button>
           {isLoggedIn ? (
-            <a
-              href="/dashboard"
-              className="text-2xl text-blue-500 hover:text-blue-700"
-            >
-              <FaUserCircle />
-            </a>
+            <div className="relative" ref={userMenuRef}>
+              <button
+                onClick={() => setUserMenuOpen(!userMenuOpen)}
+                className="flex items-center gap-2 text-blue-500 hover:text-blue-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-400 rounded-lg p-1"
+              >
+                <FaUserCircle className="text-2xl" />
+                {user && (
+                  <span className="text-sm font-medium text-gray-700 dark:text-gray-200 hidden sm:block">
+                    {user.name}
+                  </span>
+                )}
+              </button>
+              {userMenuOpen && (
+                <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 z-50 animate-fadeIn">
+                  <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-700">
+                    <p className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                      {user?.name}
+                    </p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">
+                      {user?.email}
+                    </p>
+                  </div>
+                  <div className="py-1">
+                    <button
+                      onClick={() => {
+                        setUserMenuOpen(false);
+                        navigate("/dashboard");
+                      }}
+                      className="flex items-center w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-150"
+                    >
+                      마이페이지
+                    </button>
+                    <button
+                      onClick={handleLogout}
+                      className="flex items-center w-full px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900 transition-colors duration-150"
+                    >
+                      로그아웃
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
           ) : (
             <button
               className="px-4 py-1 rounded-lg bg-blue-600 text-white font-semibold shadow hover:bg-blue-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-400"

@@ -21,7 +21,10 @@ mongoose
   .catch((err) => console.error("MongoDB connection error:", err));
 
 import authRoutes from "./routes/auth.js";
+import mentorRoutes from "./routes/mentor.js";
+
 app.use("/api/auth", authRoutes);
+app.use("/api/mentor", mentorRoutes);
 
 const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {

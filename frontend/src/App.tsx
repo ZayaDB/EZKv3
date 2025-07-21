@@ -4,15 +4,24 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 import LoginCard from "./components/LoginCard";
 import RegisterCard from "./components/RegisterCard";
+import Dashboard from "./components/Dashboard";
+import MentorApplicationForm from "./components/MentorApplicationForm";
+import AdminDashboard from "./components/AdminDashboard";
 
 const App: React.FC = () => {
   return (
     <div className="flex flex-col min-h-screen">
       <Header />
-      <main className="flex-1 container mx-auto px-4 py-8">
+      <main className="flex-1">
         <Routes>
           <Route path="/login" element={<LoginCard />} />
           <Route path="/register" element={<RegisterCard />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route
+            path="/mentor-application"
+            element={<MentorApplicationForm />}
+          />
+          <Route path="/admin" element={<AdminDashboard />} />
           <Route path="/" element={<div>홈 화면</div>} />
         </Routes>
       </main>

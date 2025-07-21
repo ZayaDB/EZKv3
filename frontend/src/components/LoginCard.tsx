@@ -30,6 +30,10 @@ const LoginCard: React.FC = () => {
       setSuccess(true);
       // JWT 토큰 저장
       localStorage.setItem("token", res.data.token);
+      // 사용자 정보 저장
+      localStorage.setItem("user", JSON.stringify(res.data.user));
+      // 헤더 업데이트를 위한 이벤트 발생
+      window.dispatchEvent(new Event("storage"));
       // 마이페이지로 이동
       setTimeout(() => navigate("/dashboard"), 1000);
     } catch (err: any) {
@@ -101,14 +105,14 @@ const LoginCard: React.FC = () => {
               onChange={(e) => setRemember(e.target.checked)}
               className="accent-blue-600 w-4 h-4 rounded"
             />
-            {t("rememberMe") || "아이디 저장"}
+            {t("rememberMe")}
           </label>
           <button
             type="button"
             className="text-xs text-blue-500 hover:underline"
             onClick={() => navigate("/forgot-password")}
           >
-            {t("forgotPassword") || "비밀번호를 잊으셨나요?"}
+            {t("forgotPassword")}
           </button>
         </div>
         {/* 로그인 버튼 */}
@@ -131,7 +135,7 @@ const LoginCard: React.FC = () => {
       </form>
       {/* 회원가입 안내 */}
       <div className="text-center text-sm text-slate-600 dark:text-slate-300 mt-2">
-        {t("noAccount") || "아직 회원이 아니신가요?"}
+        {t("noAccount")}
         <button
           className="ml-2 text-blue-600 dark:text-blue-400 font-semibold hover:underline"
           onClick={() => navigate("/register")}
