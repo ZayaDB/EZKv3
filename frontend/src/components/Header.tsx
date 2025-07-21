@@ -1,256 +1,216 @@
-import React, { useState, useRef, useEffect } from "react";
-import { FaUserCircle } from "react-icons/fa";
+import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { useNavigate, Link } from "react-router-dom";
-import EnglandFlag from "../assets/england.svg";
-import KoreaFlag from "../assets/img_koreanFlag_02.jpg";
-import MongoliaFlag from "../assets/Flag_of_Mongolia.png";
-
-const fontClass = "font-pretendard";
-
-const LANGS = [
-  { code: "en", label: "English", flag: EnglandFlag, aria: "English" },
-  { code: "ko", label: "한국어", flag: KoreaFlag, aria: "한국어" },
-  { code: "mn", label: "Монгол", flag: MongoliaFlag, aria: "Монгол" },
-];
+import { useNavigate } from "react-router-dom";
+import { FaUser, FaCog, FaSignOutAlt } from "react-icons/fa";
 
 const Header: React.FC = () => {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
-  const [lang, setLang] = useState(i18n.language || "ko");
-  const [isDark, setIsDark] = useState(() =>
-    document.documentElement.classList.contains("dark")
-  );
-  const [open, setOpen] = useState(false);
-  const [userMenuOpen, setUserMenuOpen] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement>(null);
-  const userMenuRef = useRef<HTMLDivElement>(null);
-  const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("token"));
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState<any>(null);
+  const [showUserMenu, setShowUserMenu] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(false);
 
   useEffect(() => {
-    const handleStorage = () => {
-      setIsLoggedIn(!!localStorage.getItem("token"));
-      const userData = localStorage.getItem("user");
-      if (userData) {
-        setUser(JSON.parse(userData));
-      }
-    };
-
-    // 초기 사용자 정보 로드
+    const token = localStorage.getItem("token");
     const userData = localStorage.getItem("user");
-    if (userData) {
+
+    if (token && userData) {
+      setIsLoggedIn(true);
       setUser(JSON.parse(userData));
     }
 
-    window.addEventListener("storage", handleStorage);
-    return () => window.removeEventListener("storage", handleStorage);
+    // 다크모드 상태 확인
+    const darkMode = localStorage.getItem("darkMode") === "true";
+    setIsDarkMode(darkMode);
+    if (darkMode) {
+      document.documentElement.classList.add("dark");
+    }
+
+    // 로그인 상태 변경 감지
+    const handleStorageChange = () => {
+      const newToken = localStorage.getItem("token");
+      const newUserData = localStorage.getItem("user");
+
+      if (newToken && newUserData) {
+        setIsLoggedIn(true);
+        setUser(JSON.parse(newUserData));
+      } else {
+        setIsLoggedIn(false);
+        setUser(null);
+      }
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+    window.addEventListener("loginStateChanged", handleStorageChange);
+
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+      window.removeEventListener("loginStateChanged", handleStorageChange);
+    };
   }, []);
-
-  const currentLang = LANGS.find((l) => l.code === lang) || LANGS[1];
-
-  const handleLangChange = (code: string) => {
-    setLang(code);
-    i18n.changeLanguage(code);
-    setOpen(false);
-  };
-
-  const toggleDarkMode = () => {
-    document.documentElement.classList.toggle("dark");
-    setIsDark(document.documentElement.classList.contains("dark"));
-  };
 
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     setIsLoggedIn(false);
     setUser(null);
-    setUserMenuOpen(false);
+    setShowUserMenu(false);
     navigate("/");
-    // 헤더 업데이트를 위한 이벤트 발생
-    window.dispatchEvent(new Event("storage"));
   };
 
-  // 드롭다운 외부 클릭 시 닫기
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node)
-      ) {
-        setOpen(false);
-      }
-      if (
-        userMenuRef.current &&
-        !userMenuRef.current.contains(event.target as Node)
-      ) {
-        setUserMenuOpen(false);
-      }
-    }
-    if (open || userMenuOpen) {
-      document.addEventListener("mousedown", handleClickOutside);
+  const toggleDarkMode = () => {
+    const newDarkMode = !isDarkMode;
+    setIsDarkMode(newDarkMode);
+    localStorage.setItem("darkMode", newDarkMode.toString());
+
+    if (newDarkMode) {
+      document.documentElement.classList.add("dark");
     } else {
-      document.removeEventListener("mousedown", handleClickOutside);
+      document.documentElement.classList.remove("dark");
     }
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [open, userMenuOpen]);
+  };
+
+  const changeLanguage = (lng: string) => {
+    i18n.changeLanguage(lng);
+  };
+
+  const getLanguageFlag = (lng: string) => {
+    const flags: { [key: string]: string } = {
+      ko: "🇰🇷",
+      en: "🇺🇸",
+      mn: "🇲🇳",
+    };
+    return flags[lng] || "🌐";
+  };
 
   return (
-    <header className={`w-full shadow-md ${fontClass}`}>
-      <div className="container mx-auto flex items-center justify-between py-4 px-6">
-        {/* 로고/서비스명 */}
-        <Link
-          to="/"
-          className="text-2xl font-bold text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors duration-200 cursor-pointer"
-        >
-          {t("title")}
-        </Link>
-        {/* 네비게이션 메뉴 */}
-        <nav className="flex gap-6">
-          <a
-            href="/mentors"
-            className="text-gray-700 dark:text-gray-200 hover:text-blue-500"
+    <header className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
+      <div className="container mx-auto px-4">
+        <div className="flex items-center justify-between h-16">
+          {/* 로고 */}
+          <div
+            className="flex items-center cursor-pointer"
+            onClick={() => navigate("/")}
           >
-            {t("mentorSearch")}
-          </a>
-          <a
-            href="/mentors"
-            className="text-gray-700 dark:text-gray-200 hover:text-blue-500"
-          >
-            {t("freelancer")}
-          </a>
-          <a
-            href="/courses"
-            className="text-gray-700 dark:text-gray-200 hover:text-blue-500"
-          >
-            {t("courses")}
-          </a>
-        </nav>
-        {/* 우측: 로그인/언어/다크모드/마이페이지 */}
-        <div className="flex items-center gap-4">
-          {/* 언어 선택: 국기+언어명 드롭다운 */}
-          <div className="relative" ref={dropdownRef}>
-            <button
-              className="flex items-center gap-1 px-2 py-1 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-sm hover:shadow-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-400"
-              onClick={() => setOpen((o) => !o)}
-              aria-label="언어 선택"
-              type="button"
+            <h1 className="text-xl font-bold text-gray-900 dark:text-white">
+              {t("title")}
+            </h1>
+          </div>
+
+          {/* 네비게이션 메뉴 */}
+          <nav className="hidden md:flex items-center space-x-8">
+            <a
+              href="#"
+              className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
             >
-              <img
-                src={currentLang.flag}
-                alt={currentLang.aria}
-                className="w-6 h-6 rounded-full mr-1"
-              />
-              <span className="text-sm font-medium text-gray-700 dark:text-gray-200">
-                {currentLang.label}
-              </span>
-              <span
-                className={`ml-1 text-gray-500 transition-transform ${
-                  open ? "rotate-180" : ""
-                }`}
+              {t("mentorSearch")}
+            </a>
+            <a
+              href="#"
+              className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+            >
+              {t("freelancer")}
+            </a>
+            <a
+              href="#"
+              className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+            >
+              {t("courses")}
+            </a>
+          </nav>
+
+          {/* 우측 메뉴 */}
+          <div className="flex items-center space-x-4">
+            {/* 언어 선택 */}
+            <div className="relative">
+              <button
+                onClick={() => {
+                  const currentLang = i18n.language;
+                  const languages = ["ko", "en", "mn"];
+                  const currentIndex = languages.indexOf(currentLang);
+                  const nextIndex = (currentIndex + 1) % languages.length;
+                  changeLanguage(languages[nextIndex]);
+                }}
+                className="flex items-center space-x-2 px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
               >
-                ▼
-              </span>
+                <span className="text-lg">
+                  {getLanguageFlag(i18n.language)}
+                </span>
+                <span>{t("language")}</span>
+              </button>
+            </div>
+
+            {/* 다크모드 토글 */}
+            <button
+              onClick={toggleDarkMode}
+              className="p-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+            >
+              {isDarkMode ? "☀️" : "🌙"}
             </button>
-            {open && (
-              <div className="absolute right-0 mt-2 w-36 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 z-50 animate-fadeIn">
-                {LANGS.map(({ code, label, flag, aria }) => (
-                  <button
-                    key={code}
-                    aria-label={aria}
-                    onClick={() => handleLangChange(code)}
-                    className={`flex items-center w-full px-3 py-2 gap-2 hover:bg-blue-50 dark:hover:bg-blue-900 rounded-lg transition-colors duration-150 ${
-                      lang === code
-                        ? "font-bold text-blue-600 dark:text-blue-300 bg-blue-50 dark:bg-blue-900"
-                        : "text-gray-700 dark:text-gray-200"
-                    }`}
-                  >
-                    <img
-                      src={flag}
-                      alt={aria}
-                      className="w-5 h-5 rounded-full"
-                    />
-                    <span className="text-sm">{label}</span>
-                    {lang === code && (
-                      <span className="ml-auto text-xs">✓</span>
-                    )}
-                  </button>
-                ))}
+
+            {/* 로그인/사용자 메뉴 */}
+            {isLoggedIn ? (
+              <div className="relative">
+                <button
+                  onClick={() => setShowUserMenu(!showUserMenu)}
+                  className="flex items-center space-x-2 p-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                >
+                  <div className="w-8 h-8 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center">
+                    <FaUser className="text-blue-600 dark:text-blue-400 text-sm" />
+                  </div>
+                  <span className="hidden sm:block">{user?.name}</span>
+                </button>
+
+                {/* 사용자 드롭다운 메뉴 */}
+                {showUserMenu && (
+                  <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 z-50">
+                    <div className="py-2">
+                      <button
+                        onClick={() => {
+                          setShowUserMenu(false);
+                          navigate("/dashboard");
+                        }}
+                        className="w-full flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                      >
+                        <FaUser className="mr-3" />
+                        {t("mypage")}
+                      </button>
+
+                      {/* 관리자 메뉴 */}
+                      {user?.role === "admin" && (
+                        <button
+                          onClick={() => {
+                            setShowUserMenu(false);
+                            navigate("/admin");
+                          }}
+                          className="w-full flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                        >
+                          <FaCog className="mr-3" />
+                          관리자 대시보드
+                        </button>
+                      )}
+
+                      <button
+                        onClick={handleLogout}
+                        className="w-full flex items-center px-4 py-2 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
+                      >
+                        <FaSignOutAlt className="mr-3" />
+                        로그아웃
+                      </button>
+                    </div>
+                  </div>
+                )}
               </div>
+            ) : (
+              <button
+                onClick={() => navigate("/login")}
+                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              >
+                {t("login")}
+              </button>
             )}
           </div>
-          {/* 다크모드 토글: 스위치 */}
-          <button
-            className={`relative w-12 h-6 flex items-center rounded-full transition-colors duration-300 ml-2 focus:outline-none focus:ring-2 focus:ring-blue-400 ${
-              isDark ? "bg-blue-600" : "bg-yellow-400"
-            }`}
-            onClick={toggleDarkMode}
-            aria-label="다크모드 토글"
-            type="button"
-          >
-            <span className="absolute left-1 text-yellow-400 text-lg select-none">
-              ☀️
-            </span>
-            <span className="absolute right-1 text-blue-400 text-lg select-none">
-              🌙
-            </span>
-            <span
-              className={`absolute top-0.5 left-0.5 w-5 h-5 rounded-full shadow-md transition-transform duration-300 bg-white border ${
-                isDark ? "translate-x-6 border-blue-600" : "border-yellow-400"
-              }`}
-            />
-          </button>
-          {isLoggedIn ? (
-            <div className="relative" ref={userMenuRef}>
-              <button
-                onClick={() => setUserMenuOpen(!userMenuOpen)}
-                className="flex items-center gap-2 text-blue-500 hover:text-blue-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-400 rounded-lg p-1"
-              >
-                <FaUserCircle className="text-2xl" />
-                {user && (
-                  <span className="text-sm font-medium text-gray-700 dark:text-gray-200 hidden sm:block">
-                    {user.name}
-                  </span>
-                )}
-              </button>
-              {userMenuOpen && (
-                <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 z-50 animate-fadeIn">
-                  <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-700">
-                    <p className="text-sm font-medium text-gray-900 dark:text-gray-100">
-                      {user?.name}
-                    </p>
-                    <p className="text-xs text-gray-500 dark:text-gray-400">
-                      {user?.email}
-                    </p>
-                  </div>
-                  <div className="py-1">
-                    <button
-                      onClick={() => {
-                        setUserMenuOpen(false);
-                        navigate("/dashboard");
-                      }}
-                      className="flex items-center w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-150"
-                    >
-                      마이페이지
-                    </button>
-                    <button
-                      onClick={handleLogout}
-                      className="flex items-center w-full px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900 transition-colors duration-150"
-                    >
-                      로그아웃
-                    </button>
-                  </div>
-                </div>
-              )}
-            </div>
-          ) : (
-            <button
-              className="px-4 py-1 rounded-lg bg-blue-600 text-white font-semibold shadow hover:bg-blue-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-400"
-              onClick={() => navigate("/login")}
-            >
-              {t("login")}
-            </button>
-          )}
         </div>
       </div>
     </header>
