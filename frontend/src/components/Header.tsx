@@ -1,7 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
-import { FaUser, FaCog, FaSignOutAlt } from "react-icons/fa";
+import {
+  FaUser,
+  FaCog,
+  FaSignOutAlt,
+  FaChalkboardTeacher,
+  FaSun,
+  FaMoon,
+} from "react-icons/fa";
+// 국기 이미지 import
+import koreanFlag from "../assets/img_koreanFlag_02.jpg";
+import englandFlag from "../assets/england.svg";
+import mongoliaFlag from "../assets/Flag_of_Mongolia.png";
 
 const Header: React.FC = () => {
   const { t, i18n } = useTranslation();
@@ -77,15 +88,24 @@ const Header: React.FC = () => {
 
   const getLanguageFlag = (lng: string) => {
     const flags: { [key: string]: string } = {
-      ko: "🇰🇷",
-      en: "🇺🇸",
-      mn: "🇲🇳",
+      ko: koreanFlag,
+      en: englandFlag,
+      mn: mongoliaFlag,
     };
-    return flags[lng] || "🌐";
+    return flags[lng] || koreanFlag;
+  };
+
+  const getLanguageName = (lng: string) => {
+    const names: { [key: string]: string } = {
+      ko: "한국어",
+      en: "English",
+      mn: "Монгол",
+    };
+    return names[lng] || "Language";
   };
 
   return (
-    <header className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
+    <header className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700 sticky top-0 z-50">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           {/* 로고 */}
@@ -121,7 +141,7 @@ const Header: React.FC = () => {
           </nav>
 
           {/* 우측 메뉴 */}
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-2 md:space-x-4">
             {/* 언어 선택 */}
             <div className="relative">
               <button
@@ -132,21 +152,33 @@ const Header: React.FC = () => {
                   const nextIndex = (currentIndex + 1) % languages.length;
                   changeLanguage(languages[nextIndex]);
                 }}
-                className="flex items-center space-x-2 px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                className="flex items-center space-x-2 px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
+                title={`현재 언어: ${getLanguageName(i18n.language)}`}
               >
-                <span className="text-lg">
-                  {getLanguageFlag(i18n.language)}
-                </span>
-                <span>{t("language")}</span>
+                <div className="flex items-center space-x-2">
+                  <img
+                    src={getLanguageFlag(i18n.language)}
+                    alt={`${getLanguageName(i18n.language)} flag`}
+                    className="w-5 h-3 object-cover rounded-sm shadow-sm"
+                  />
+                  <span className="hidden md:block">
+                    {getLanguageName(i18n.language)}
+                  </span>
+                </div>
               </button>
             </div>
 
             {/* 다크모드 토글 */}
             <button
               onClick={toggleDarkMode}
-              className="p-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+              className="p-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
+              title={isDarkMode ? "라이트 모드로 전환" : "다크 모드로 전환"}
             >
-              {isDarkMode ? "☀️" : "🌙"}
+              {isDarkMode ? (
+                <FaSun className="text-sm md:text-base" />
+              ) : (
+                <FaMoon className="text-sm md:text-base" />
+              )}
             </button>
 
             {/* 로그인/사용자 메뉴 */}
@@ -154,7 +186,7 @@ const Header: React.FC = () => {
               <div className="relative">
                 <button
                   onClick={() => setShowUserMenu(!showUserMenu)}
-                  className="flex items-center space-x-2 p-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                  className="flex items-center space-x-2 p-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
                 >
                   <div className="w-8 h-8 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center">
                     <FaUser className="text-blue-600 dark:text-blue-400 text-sm" />
@@ -166,29 +198,58 @@ const Header: React.FC = () => {
                 {showUserMenu && (
                   <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 z-50">
                     <div className="py-2">
-                      <button
-                        onClick={() => {
-                          setShowUserMenu(false);
-                          navigate("/dashboard");
-                        }}
-                        className="w-full flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-                      >
-                        <FaUser className="mr-3" />
-                        {t("mypage")}
-                      </button>
-
-                      {/* 관리자 메뉴 */}
-                      {user?.role === "admin" && (
+                      {/* 학생/일반 사용자 메뉴 */}
+                      {user?.role === "student" && (
                         <button
                           onClick={() => {
                             setShowUserMenu(false);
-                            navigate("/admin");
+                            navigate("/dashboard");
                           }}
                           className="w-full flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
                         >
-                          <FaCog className="mr-3" />
-                          관리자 대시보드
+                          <FaUser className="mr-3" />
+                          {t("mypage")}
                         </button>
+                      )}
+
+                      {/* 멘토 메뉴 */}
+                      {user?.role === "mentor" && (
+                        <button
+                          onClick={() => {
+                            setShowUserMenu(false);
+                            navigate("/mentor-dashboard");
+                          }}
+                          className="w-full flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                        >
+                          <FaChalkboardTeacher className="mr-3" />
+                          멘토 대시보드
+                        </button>
+                      )}
+
+                      {/* 관리자 메뉴 */}
+                      {user?.role === "admin" && (
+                        <>
+                          <button
+                            onClick={() => {
+                              setShowUserMenu(false);
+                              navigate("/dashboard");
+                            }}
+                            className="w-full flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                          >
+                            <FaUser className="mr-3" />
+                            {t("mypage")}
+                          </button>
+                          <button
+                            onClick={() => {
+                              setShowUserMenu(false);
+                              navigate("/admin");
+                            }}
+                            className="w-full flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                          >
+                            <FaCog className="mr-3" />
+                            관리자 대시보드
+                          </button>
+                        </>
                       )}
 
                       <button
@@ -205,7 +266,7 @@ const Header: React.FC = () => {
             ) : (
               <button
                 onClick={() => navigate("/login")}
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                className="px-3 md:px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm md:text-base"
               >
                 {t("login")}
               </button>

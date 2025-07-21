@@ -7,6 +7,8 @@ import RegisterCard from "./components/RegisterCard";
 import Dashboard from "./components/Dashboard";
 import MentorApplicationForm from "./components/MentorApplicationForm";
 import AdminDashboard from "./components/AdminDashboard";
+import MentorDashboard from "./components/MentorDashboard";
+import CourseCreator from "./components/CourseCreator";
 
 const App: React.FC = () => {
   return (
@@ -22,6 +24,8 @@ const App: React.FC = () => {
             element={<MentorApplicationForm />}
           />
           <Route path="/admin" element={<AdminDashboard />} />
+          <Route path="/mentor-dashboard" element={<MentorDashboard />} />
+          <Route path="/create-course" element={<CourseCreator />} />
           <Route path="/" element={<div>홈 화면</div>} />
         </Routes>
       </main>
