@@ -1,7 +1,9 @@
-const express = require("express");
-const mongoose = require("mongoose");
-const cors = require("cors");
-require("dotenv").config();
+import express from "express";
+import mongoose from "mongoose";
+import cors from "cors";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const app = express();
 
@@ -10,9 +12,9 @@ app.use(cors());
 app.use(express.json());
 
 // 라우트
-app.use("/api/auth", require("./routes/auth"));
-app.use("/api/mentor", require("./routes/mentor"));
-app.use("/api/course", require("./routes/course"));
+app.use("/api/auth", (await import("./routes/auth.js")).default);
+app.use("/api/mentor", (await import("./routes/mentor.js")).default);
+app.use("/api/course", (await import("./routes/course.js")).default);
 
 // 기본 라우트
 app.get("/", (req, res) => {

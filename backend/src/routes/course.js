@@ -1,8 +1,9 @@
-const express = require("express");
+import express from "express";
+import Course from "../models/Course.js";
+import auth from "../middleware/auth.js";
+import mentorAuth from "../middleware/mentorAuth.js";
+
 const router = express.Router();
-const Course = require("../models/Course");
-const auth = require("../middleware/auth");
-const mentorAuth = require("../middleware/mentorAuth");
 
 // 멘토가 강의 생성
 router.post("/", auth, mentorAuth, async (req, res) => {
@@ -298,4 +299,4 @@ router.get("/", async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

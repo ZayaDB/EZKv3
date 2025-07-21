@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const courseSchema = new mongoose.Schema(
   {
@@ -110,4 +110,4 @@ const courseSchema = new mongoose.Schema(
 // 강의 검색을 위한 인덱스
 courseSchema.index({ title: "text", description: "text", tags: "text" });
 
-module.exports = mongoose.model("Course", courseSchema);
+export default mongoose.model("Course", courseSchema);

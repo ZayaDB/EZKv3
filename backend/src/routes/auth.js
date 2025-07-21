@@ -8,30 +8,56 @@ const router = express.Router();
 // 회원가입
 router.post("/register", async (req, res) => {
   try {
-    const { email, password, name } = req.body;
+    const { name, email, password, role = "student" } = req.body;
 
     // 이메일 중복 확인
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      return res.status(400).json({ message: "이미 존재하는 이메일입니다." });
+      return res.status(400).json({
+        success: false,
+        message: "이미 존재하는 이메일입니다.",
+      });
     }
 
-    // 비밀번호 해싱
-    const hashedPassword = await bcrypt.hash(password, 12);
+    // 비밀번호 해시화
+    const saltRounds = 10;
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
 
-    // 새 사용자 생성
+    // 사용자 생성
     const user = new User({
+      name,
       email,
       password: hashedPassword,
-      name,
+      role,
     });
 
     await user.save();
 
-    res.status(201).json({ message: "회원가입이 완료되었습니다!" });
+    // JWT 토큰 생성
+    const token = jwt.sign(
+      { userId: user._id, email: user.email, role: user.role },
+      process.env.JWT_SECRET,
+      { expiresIn: "7d" }
+    );
+
+    res.status(201).json({
+      success: true,
+      message: "회원가입이 완료되었습니다.",
+      token,
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+      },
+    });
   } catch (error) {
-    console.error("Registration error:", error);
-    res.status(500).json({ message: "서버 오류가 발생했습니다." });
+    console.error("회원가입 오류:", error);
+    res.status(500).json({
+      success: false,
+      message: "회원가입에 실패했습니다.",
+      error: error.message,
+    });
   }
 });
 
@@ -43,80 +69,96 @@ router.post("/login", async (req, res) => {
     // 사용자 찾기
     const user = await User.findOne({ email });
     if (!user) {
-      return res
-        .status(400)
-        .json({ message: "이메일 또는 비밀번호가 잘못되었습니다." });
+      return res.status(401).json({
+        success: false,
+        message: "이메일 또는 비밀번호가 올바르지 않습니다.",
+      });
     }
 
     // 비밀번호 확인
-    const isValidPassword = await bcrypt.compare(password, user.password);
-    if (!isValidPassword) {
-      return res
-        .status(400)
-        .json({ message: "이메일 또는 비밀번호가 잘못되었습니다." });
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+      return res.status(401).json({
+        success: false,
+        message: "이메일 또는 비밀번호가 올바르지 않습니다.",
+      });
     }
 
     // JWT 토큰 생성
     const token = jwt.sign(
-      { userId: user._id, email: user.email },
-      process.env.JWT_SECRET || "your-secret-key",
+      { userId: user._id, email: user.email, role: user.role },
+      process.env.JWT_SECRET,
       { expiresIn: "7d" }
     );
 
-    // 사용자 정보에서 비밀번호 제외
-    const userWithoutPassword = {
-      _id: user._id,
-      email: user.email,
-      name: user.name,
-      role: user.role,
-    };
-
     res.json({
-      message: "로그인이 완료되었습니다",
+      success: true,
+      message: "로그인이 완료되었습니다.",
       token,
-      user: userWithoutPassword,
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        mentorInfo: user.mentorInfo,
+        studentInfo: user.studentInfo,
+      },
     });
   } catch (error) {
-    console.error("Login error:", error);
-    res.status(500).json({ message: "서버 오류가 발생했습니다." });
+    console.error("로그인 오류:", error);
+    res.status(500).json({
+      success: false,
+      message: "로그인에 실패했습니다.",
+      error: error.message,
+    });
   }
 });
 
-// 관리자 계정 생성 (임시 - 나중에 삭제)
+// 임시 관리자 계정 생성 (개발용)
 router.post("/create-admin", async (req, res) => {
   try {
-    const { email, password, name } = req.body;
+    const { name, email, password } = req.body;
 
     // 이메일 중복 확인
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      return res.status(400).json({ message: "이미 존재하는 이메일입니다." });
+      return res.status(400).json({
+        success: false,
+        message: "이미 존재하는 이메일입니다.",
+      });
     }
 
-    // 비밀번호 해싱
-    const hashedPassword = await bcrypt.hash(password, 12);
+    // 비밀번호 해시화
+    const saltRounds = 10;
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
 
-    // 관리자 계정 생성
-    const adminUser = new User({
+    // 관리자 사용자 생성
+    const user = new User({
+      name,
       email,
       password: hashedPassword,
-      name,
-      role: "admin", // 관리자 역할 설정
+      role: "admin",
     });
 
-    await adminUser.save();
+    await user.save();
 
     res.status(201).json({
-      message: "관리자 계정이 생성되었습니다!",
+      success: true,
+      message: "관리자 계정이 생성되었습니다.",
       user: {
-        email: adminUser.email,
-        name: adminUser.name,
-        role: adminUser.role,
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
       },
     });
   } catch (error) {
-    console.error("Admin creation error:", error);
-    res.status(500).json({ message: "서버 오류가 발생했습니다." });
+    console.error("관리자 계정 생성 오류:", error);
+    res.status(500).json({
+      success: false,
+      message: "관리자 계정 생성에 실패했습니다.",
+      error: error.message,
+    });
   }
 });
 
