@@ -2,6 +2,9 @@ import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
+import authRoutes from "./routes/auth.js";
+import mentorRoutes from "./routes/mentor.js";
+import courseRoutes from "./routes/course.js";
 
 dotenv.config();
 
@@ -12,9 +15,9 @@ app.use(cors());
 app.use(express.json());
 
 // 라우트
-app.use("/api/auth", (await import("./routes/auth.js")).default);
-app.use("/api/mentor", (await import("./routes/mentor.js")).default);
-app.use("/api/course", (await import("./routes/course.js")).default);
+app.use("/api/auth", authRoutes);
+app.use("/api/mentor", mentorRoutes);
+app.use("/api/course", courseRoutes);
 
 // 기본 라우트
 app.get("/", (req, res) => {

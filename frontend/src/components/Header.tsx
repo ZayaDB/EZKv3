@@ -120,12 +120,12 @@ const Header: React.FC = () => {
 
           {/* 네비게이션 메뉴 */}
           <nav className="hidden md:flex items-center space-x-8">
-            <a
-              href="#"
+            <button
+              onClick={() => navigate("/mentor-search")}
               className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
             >
               {t("mentorSearch")}
-            </a>
+            </button>
             <a
               href="#"
               className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
