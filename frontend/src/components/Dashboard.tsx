@@ -98,13 +98,26 @@ const Dashboard: React.FC = () => {
         {/* 헤더 섹션 */}
         <div className="mb-8">
           <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-                {t("welcome")}, {user?.name}님! 👋
-              </h1>
-              <p className="text-gray-600 dark:text-gray-400">
-                {t("welcomeMessage")}
-              </p>
+            <div className="flex items-center gap-4">
+              <div className="w-16 h-16 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center overflow-hidden">
+                {user?.profileImage ? (
+                  <img
+                    src={user.profileImage}
+                    alt={user.name}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <FaGraduationCap className="text-blue-600 dark:text-blue-400 text-2xl" />
+                )}
+              </div>
+              <div>
+                <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+                  {t("welcome")}, {user?.name}님! 👋
+                </h1>
+                <p className="text-gray-600 dark:text-gray-400">
+                  {t("welcomeMessage")}
+                </p>
+              </div>
             </div>
             {/* 멘토인 경우 멘토 대시보드로 돌아가는 버튼 표시 */}
             {user?.role === "mentor" && (

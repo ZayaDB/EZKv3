@@ -1,6 +1,13 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { FaPlus, FaTrash, FaSave, FaPaperPlane } from "react-icons/fa";
+import {
+  FaPlus,
+  FaTrash,
+  FaSave,
+  FaPaperPlane,
+  FaUpload,
+  FaImage,
+} from "react-icons/fa";
 
 interface Lesson {
   title: string;
@@ -38,6 +45,7 @@ const CourseCreator: React.FC = () => {
     videoUrl: "",
     materials: [],
   });
+  const [thumbnailPreview, setThumbnailPreview] = useState<string>("");
 
   const categories = [
     { value: "programming", label: "프로그래밍" },
@@ -107,6 +115,34 @@ const CourseCreator: React.FC = () => {
       duration: prev.duration - prev.lessons[index].duration,
       lessons: prev.lessons.filter((_, i) => i !== index),
     }));
+  };
+
+  const handleThumbnailUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      // 파일 크기 체크 (5MB 이하)
+      if (file.size > 5 * 1024 * 1024) {
+        alert("이미지 파일 크기는 5MB 이하여야 합니다.");
+        return;
+      }
+
+      // 파일 타입 체크
+      if (!file.type.startsWith("image/")) {
+        alert("이미지 파일만 업로드 가능합니다.");
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const result = e.target?.result as string;
+        setThumbnailPreview(result);
+        setCourseData((prev) => ({
+          ...prev,
+          thumbnail: result,
+        }));
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   const handleSubmit = async () => {
@@ -347,17 +383,45 @@ const CourseCreator: React.FC = () => {
 
                     <div>
                       <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                        썸네일 URL
+                        썸네일 이미지
                       </label>
-                      <input
-                        type="url"
-                        value={courseData.thumbnail}
-                        onChange={(e) =>
-                          handleInputChange("thumbnail", e.target.value)
-                        }
-                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
-                        placeholder="https://example.com/image.jpg"
-                      />
+                      <div className="space-y-2">
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={handleThumbnailUpload}
+                          className="hidden"
+                          id="thumbnail-upload"
+                        />
+                        <label
+                          htmlFor="thumbnail-upload"
+                          className="flex items-center justify-center gap-2 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                        >
+                          <FaUpload />
+                          이미지 업로드
+                        </label>
+                        {thumbnailPreview && (
+                          <div className="relative">
+                            <img
+                              src={thumbnailPreview}
+                              alt="썸네일 미리보기"
+                              className="w-full h-32 object-cover rounded-lg border border-gray-200 dark:border-gray-600"
+                            />
+                            <button
+                              onClick={() => {
+                                setThumbnailPreview("");
+                                setCourseData((prev) => ({
+                                  ...prev,
+                                  thumbnail: "",
+                                }));
+                              }}
+                              className="absolute top-2 right-2 p-1 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors"
+                            >
+                              <FaTrash className="text-xs" />
+                            </button>
+                          </div>
+                        )}
+                      </div>
                     </div>
                   </div>
 
@@ -533,6 +597,19 @@ const CourseCreator: React.FC = () => {
                   강의 미리보기
                 </h2>
                 <div className="space-y-3">
+                  {/* 썸네일 미리보기 */}
+                  {courseData.thumbnail && (
+                    <div>
+                      <p className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        썸네일
+                      </p>
+                      <img
+                        src={courseData.thumbnail}
+                        alt="강의 썸네일"
+                        className="w-full h-32 object-cover rounded-lg border border-gray-200 dark:border-gray-600"
+                      />
+                    </div>
+                  )}
                   <div>
                     <p className="text-sm font-medium text-gray-700 dark:text-gray-300">
                       제목

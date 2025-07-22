@@ -14,6 +14,7 @@ interface Mentor {
   _id: string;
   name: string;
   email: string;
+  profileImage?: string;
   mentorInfo: {
     specialization: string;
     experience: string;
@@ -260,8 +261,16 @@ const MentorSearch: React.FC = () => {
                   >
                     {/* 멘토 프로필 */}
                     <div className="flex items-center mb-4">
-                      <div className="w-16 h-16 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center mr-4">
-                        <FaGraduationCap className="text-blue-600 dark:text-blue-400 text-2xl" />
+                      <div className="w-16 h-16 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center mr-4 overflow-hidden">
+                        {mentor.profileImage ? (
+                          <img
+                            src={mentor.profileImage}
+                            alt={mentor.name}
+                            className="w-full h-full object-cover"
+                          />
+                        ) : (
+                          <FaGraduationCap className="text-blue-600 dark:text-blue-400 text-2xl" />
+                        )}
                       </div>
                       <div className="flex-1">
                         <h3 className="text-lg font-semibold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">

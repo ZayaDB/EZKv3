@@ -30,6 +30,7 @@ interface Mentor {
   _id: string;
   name: string;
   email: string;
+  profileImage?: string;
   mentorInfo: {
     specialization: string;
     hourlyRate: number;
@@ -45,6 +46,7 @@ interface Course {
   level: string;
   price: number;
   duration: number;
+  thumbnail?: string;
   status: "draft" | "pending" | "approved" | "rejected";
   mentor: {
     name: string;
@@ -505,13 +507,28 @@ const AdminDashboard: React.FC = () => {
                         className="border-b border-gray-100 dark:border-gray-700"
                       >
                         <td className="py-3 px-4">
-                          <div>
-                            <p className="font-medium text-gray-900 dark:text-white">
-                              {course.title}
-                            </p>
-                            <p className="text-sm text-gray-500 dark:text-gray-400">
-                              {course.description.substring(0, 50)}...
-                            </p>
+                          <div className="flex items-center gap-3">
+                            <div className="w-12 h-12 bg-gray-200 dark:bg-gray-700 rounded-lg overflow-hidden flex-shrink-0">
+                              {course.thumbnail ? (
+                                <img
+                                  src={course.thumbnail}
+                                  alt={course.title}
+                                  className="w-full h-full object-cover"
+                                />
+                              ) : (
+                                <div className="w-full h-full flex items-center justify-center">
+                                  <FaBook className="text-gray-400 dark:text-gray-600" />
+                                </div>
+                              )}
+                            </div>
+                            <div>
+                              <p className="font-medium text-gray-900 dark:text-white">
+                                {course.title}
+                              </p>
+                              <p className="text-sm text-gray-500 dark:text-gray-400">
+                                {course.description.substring(0, 50)}...
+                              </p>
+                            </div>
                           </div>
                         </td>
                         <td className="py-3 px-4">
@@ -601,8 +618,16 @@ const AdminDashboard: React.FC = () => {
                     className="border border-gray-200 dark:border-gray-700 rounded-lg p-4"
                   >
                     <div className="flex items-center gap-3 mb-3">
-                      <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center">
-                        <FaGraduationCap className="text-blue-600 dark:text-blue-400" />
+                      <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center overflow-hidden">
+                        {mentor.profileImage ? (
+                          <img
+                            src={mentor.profileImage}
+                            alt={mentor.name}
+                            className="w-full h-full object-cover"
+                          />
+                        ) : (
+                          <FaGraduationCap className="text-blue-600 dark:text-blue-400" />
+                        )}
                       </div>
                       <div>
                         <h3 className="font-medium text-gray-900 dark:text-white">
@@ -729,6 +754,20 @@ const AdminDashboard: React.FC = () => {
             </h3>
 
             <div className="space-y-4 mb-6">
+              {/* 썸네일 */}
+              {selectedCourse.thumbnail && (
+                <div>
+                  <h4 className="font-medium text-gray-900 dark:text-white mb-2">
+                    썸네일
+                  </h4>
+                  <img
+                    src={selectedCourse.thumbnail}
+                    alt={selectedCourse.title}
+                    className="w-full max-w-md h-48 object-cover rounded-lg border border-gray-200 dark:border-gray-600"
+                  />
+                </div>
+              )}
+
               <div>
                 <h4 className="font-medium text-gray-900 dark:text-white mb-2">
                   강의 정보
