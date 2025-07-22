@@ -1,29 +1,24 @@
 import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
-import {
-  FaUser,
-  FaCog,
-  FaSignOutAlt,
-  FaChalkboardTeacher,
-  FaSun,
-  FaMoon,
-  FaBars,
-} from "react-icons/fa";
-import LNB from "./LNB";
+import { FaUser, FaSun, FaMoon, FaBars } from "react-icons/fa";
 // 국기 이미지 import
 import koreanFlag from "../assets/img_koreanFlag_02.jpg";
 import englandFlag from "../assets/england.svg";
 import mongoliaFlag from "../assets/Flag_of_Mongolia.png";
 
-const Header: React.FC = () => {
+interface HeaderProps {
+  showLNB: boolean;
+  setShowLNB: (show: boolean) => void;
+}
+
+const Header: React.FC<HeaderProps> = ({ showLNB, setShowLNB }) => {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState<any>(null);
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
-  const [showLNB, setShowLNB] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -267,9 +262,6 @@ const Header: React.FC = () => {
           </div>
         </div>
       </header>
-
-      {/* LNB */}
-      {isLoggedIn && <LNB isOpen={showLNB} onClose={() => setShowLNB(false)} />}
     </>
   );
 };

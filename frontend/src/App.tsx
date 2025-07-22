@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+import LNB from "./components/LNB";
 import LoginCard from "./components/LoginCard";
 import RegisterCard from "./components/RegisterCard";
 import Dashboard from "./components/Dashboard";
@@ -15,6 +16,7 @@ import MentorSearch from "./components/MentorSearch";
 
 const App: React.FC = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [showLNB, setShowLNB] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -36,25 +38,30 @@ const App: React.FC = () => {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <Header />
-      <main className={`flex-1 ${isLoggedIn ? "lg:ml-80" : ""}`}>
-        <Routes>
-          <Route path="/login" element={<LoginCard />} />
-          <Route path="/register" element={<RegisterCard />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route
-            path="/mentor-application"
-            element={<MentorApplicationForm />}
-          />
-          <Route path="/admin" element={<AdminDashboard />} />
-          <Route path="/mentor-dashboard" element={<MentorDashboard />} />
-          <Route path="/create-course" element={<CourseCreator />} />
-          <Route path="/courses" element={<CourseList />} />
-          <Route path="/course/:id" element={<CourseDetail />} />
-          <Route path="/mentor-search" element={<MentorSearch />} />
-          <Route path="/" element={<div>홈 화면</div>} />
-        </Routes>
-      </main>
+      <Header showLNB={showLNB} setShowLNB={setShowLNB} />
+      <div className="flex flex-1">
+        {isLoggedIn && (
+          <LNB isOpen={showLNB} onClose={() => setShowLNB(false)} />
+        )}
+        <main className="flex-1">
+          <Routes>
+            <Route path="/login" element={<LoginCard />} />
+            <Route path="/register" element={<RegisterCard />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route
+              path="/mentor-application"
+              element={<MentorApplicationForm />}
+            />
+            <Route path="/admin" element={<AdminDashboard />} />
+            <Route path="/mentor-dashboard" element={<MentorDashboard />} />
+            <Route path="/create-course" element={<CourseCreator />} />
+            <Route path="/courses" element={<CourseList />} />
+            <Route path="/course/:id" element={<CourseDetail />} />
+            <Route path="/mentor-search" element={<MentorSearch />} />
+            <Route path="/" element={<div>홈 화면</div>} />
+          </Routes>
+        </main>
+      </div>
       <Footer />
     </div>
   );

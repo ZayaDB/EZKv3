@@ -551,19 +551,6 @@ const Dashboard: React.FC = () => {
                     </div>
                   </button>
                 )}
-
-                {/* 멘토인 경우 멘토 대시보드로 돌아가는 버튼 */}
-                {user?.role === "mentor" && (
-                  <button
-                    onClick={switchToMentorMode}
-                    className="w-full flex items-center gap-3 p-3 text-left bg-orange-50 dark:bg-orange-900/20 rounded-lg hover:bg-orange-100 dark:hover:bg-orange-900/40 transition-colors"
-                  >
-                    <FaChalkboardTeacher className="text-orange-600 dark:text-orange-400" />
-                    <span className="text-gray-700 dark:text-gray-300">
-                      {t("switchToMentorMode")}
-                    </span>
-                  </button>
-                )}
               </div>
             </div>
           </div>

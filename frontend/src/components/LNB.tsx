@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { useTranslation } from "react-i18next";
 import { useNavigate, useLocation } from "react-router-dom";
 import {
   FaUser,
@@ -15,7 +14,6 @@ import {
   FaCreditCard,
   FaQuestionCircle,
   FaTimes,
-  FaBars,
 } from "react-icons/fa";
 
 interface LNBProps {
@@ -24,7 +22,6 @@ interface LNBProps {
 }
 
 const LNB: React.FC<LNBProps> = ({ isOpen, onClose }) => {
-  const { t } = useTranslation();
   const navigate = useNavigate();
   const location = useLocation();
   const [user, setUser] = useState<any>(null);
@@ -152,7 +149,7 @@ const LNB: React.FC<LNBProps> = ({ isOpen, onClose }) => {
       <div
         className={`fixed top-0 left-0 h-full w-80 bg-white dark:bg-gray-800 shadow-xl transform transition-transform duration-300 ease-in-out z-50 ${
           isOpen ? "translate-x-0" : "-translate-x-full"
-        } lg:translate-x-0 lg:static lg:shadow-none`}
+        } lg:relative lg:translate-x-0 lg:shadow-none lg:z-auto lg:top-auto lg:left-auto lg:h-auto lg:min-h-screen`}
       >
         {/* 헤더 */}
         <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
