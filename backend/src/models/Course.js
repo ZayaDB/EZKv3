@@ -111,7 +111,7 @@ const courseSchema = new mongoose.Schema(
     },
     language: {
       type: String,
-      default: "ko",
+      default: "en",
       enum: ["ko", "en", "mn"],
     },
   },
