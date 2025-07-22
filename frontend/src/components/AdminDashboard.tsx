@@ -181,12 +181,26 @@ const AdminDashboard: React.FC = () => {
 
   const getStatusBadge = (status: string) => {
     const statusConfig: Record<string, { color: string; text: string }> = {
-      pending: { color: "bg-yellow-100 text-yellow-800", text: "대기중" },
-      approved: { color: "bg-green-100 text-green-800", text: "승인됨" },
-      rejected: { color: "bg-red-100 text-red-800", text: "거절됨" },
-      draft: { color: "bg-gray-100 text-gray-800", text: "초안" },
+      draft: {
+        color: "bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300",
+        text: "초안",
+      },
+      pending: {
+        color:
+          "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200",
+        text: "검토 대기",
+      },
+      approved: {
+        color:
+          "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200",
+        text: "승인됨",
+      },
+      rejected: {
+        color: "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200",
+        text: "거절됨",
+      },
     };
-    const config = statusConfig[status] || statusConfig.pending;
+    const config = statusConfig[status] || statusConfig.draft;
     return (
       <span
         className={`px-2 py-1 rounded-full text-xs font-medium ${config.color}`}
@@ -541,6 +555,7 @@ const AdminDashboard: React.FC = () => {
                                     handleCourseReview("approved");
                                   }}
                                   className="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors"
+                                  title="강의 승인"
                                 >
                                   <FaCheck />
                                 </button>
@@ -550,10 +565,16 @@ const AdminDashboard: React.FC = () => {
                                     handleCourseReview("rejected");
                                   }}
                                   className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                                  title="강의 거절"
                                 >
                                   <FaTimes />
                                 </button>
                               </>
+                            )}
+                            {course.status === "draft" && (
+                              <span className="text-xs text-gray-500 dark:text-gray-400 px-2 py-1">
+                                제출 대기
+                              </span>
                             )}
                           </div>
                         </td>

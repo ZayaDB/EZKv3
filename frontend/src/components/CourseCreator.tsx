@@ -27,7 +27,7 @@ const CourseCreator: React.FC = () => {
     duration: 0,
     thumbnail: "",
     tags: [] as string[],
-    language: "ko",
+    language: "en",
     lessons: [] as Lesson[],
   });
   const [newTag, setNewTag] = useState("");
