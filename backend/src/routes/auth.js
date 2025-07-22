@@ -5,6 +5,28 @@ import User from "../models/User.js";
 
 const router = express.Router();
 
+// JWT 미들웨어
+const authenticateToken = (req, res, next) => {
+  const authHeader = req.headers["authorization"];
+  const token = authHeader && authHeader.split(" ")[1];
+
+  if (!token) {
+    return res.status(401).json({ message: "Access token required" });
+  }
+
+  jwt.verify(
+    token,
+    process.env.JWT_SECRET || "your-secret-key",
+    (err, user) => {
+      if (err) {
+        return res.status(403).json({ message: "Invalid token" });
+      }
+      req.user = user;
+      next();
+    }
+  );
+};
+
 // 회원가입
 router.post("/register", async (req, res) => {
   try {
@@ -49,6 +71,7 @@ router.post("/register", async (req, res) => {
         name: user.name,
         email: user.email,
         role: user.role,
+        profileImage: user.profileImage,
       },
     });
   } catch (error) {
@@ -100,6 +123,7 @@ router.post("/login", async (req, res) => {
         name: user.name,
         email: user.email,
         role: user.role,
+        profileImage: user.profileImage,
         mentorInfo: user.mentorInfo,
         studentInfo: user.studentInfo,
       },
@@ -157,6 +181,49 @@ router.post("/create-admin", async (req, res) => {
     res.status(500).json({
       success: false,
       message: "관리자 계정 생성에 실패했습니다.",
+      error: error.message,
+    });
+  }
+});
+
+// 프로필 업데이트
+router.put("/profile", authenticateToken, async (req, res) => {
+  try {
+    const { name, profileImage } = req.body;
+    const userId = req.user.userId;
+
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "사용자를 찾을 수 없습니다.",
+      });
+    }
+
+    // 업데이트할 필드들
+    if (name) user.name = name;
+    if (profileImage !== undefined) user.profileImage = profileImage;
+
+    await user.save();
+
+    res.json({
+      success: true,
+      message: "프로필이 업데이트되었습니다.",
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        profileImage: user.profileImage,
+        mentorInfo: user.mentorInfo,
+        studentInfo: user.studentInfo,
+      },
+    });
+  } catch (error) {
+    console.error("프로필 업데이트 오류:", error);
+    res.status(500).json({
+      success: false,
+      message: "프로필 업데이트에 실패했습니다.",
       error: error.message,
     });
   }

@@ -215,7 +215,7 @@ router.put(
 router.get("/mentors", authenticateToken, requireAdmin, async (req, res) => {
   try {
     const mentors = await User.find({ role: "mentor" })
-      .select("name email mentorInfo createdAt")
+      .select("name email profileImage mentorInfo createdAt")
       .sort({ createdAt: -1 });
 
     res.json(mentors);
@@ -270,7 +270,7 @@ router.get("/approved", async (req, res) => {
     sortOptions[sortBy] = order === "desc" ? -1 : 1;
 
     const mentors = await User.find(query)
-      .select("name email mentorInfo")
+      .select("name email profileImage mentorInfo")
       .sort(sortOptions)
       .limit(50);
 

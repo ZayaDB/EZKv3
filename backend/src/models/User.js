@@ -18,6 +18,10 @@ const userSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
+    profileImage: {
+      type: String,
+      default: "",
+    },
     role: {
       type: String,
       enum: ["student", "mentor", "admin"],

@@ -6,7 +6,6 @@ import {
   FaSave,
   FaPaperPlane,
   FaUpload,
-  FaImage,
 } from "react-icons/fa";
 
 interface Lesson {
