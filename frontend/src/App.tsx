@@ -9,6 +9,8 @@ import MentorApplicationForm from "./components/MentorApplicationForm";
 import AdminDashboard from "./components/AdminDashboard";
 import MentorDashboard from "./components/MentorDashboard";
 import CourseCreator from "./components/CourseCreator";
+import CourseList from "./components/CourseList";
+import CourseDetail from "./components/CourseDetail";
 import MentorSearch from "./components/MentorSearch";
 
 const App: React.FC = () => {
@@ -27,6 +29,8 @@ const App: React.FC = () => {
           <Route path="/admin" element={<AdminDashboard />} />
           <Route path="/mentor-dashboard" element={<MentorDashboard />} />
           <Route path="/create-course" element={<CourseCreator />} />
+          <Route path="/courses" element={<CourseList />} />
+          <Route path="/course/:id" element={<CourseDetail />} />
           <Route path="/mentor-search" element={<MentorSearch />} />
           <Route path="/" element={<div>홈 화면</div>} />
         </Routes>

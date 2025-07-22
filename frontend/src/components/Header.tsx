@@ -132,12 +132,12 @@ const Header: React.FC = () => {
             >
               {t("freelancer")}
             </a>
-            <a
-              href="#"
+            <button
+              onClick={() => navigate("/courses")}
               className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
             >
               {t("courses")}
-            </a>
+            </button>
           </nav>
 
           {/* 우측 메뉴 */}

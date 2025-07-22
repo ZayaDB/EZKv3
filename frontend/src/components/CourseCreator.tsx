@@ -1,16 +1,6 @@
 import React, { useState } from "react";
-import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
-import {
-  FaPlus,
-  FaTrash,
-  FaSave,
-  FaEye,
-  FaEyeSlash,
-  FaUpload,
-  FaLink,
-  FaPaperPlane,
-} from "react-icons/fa";
+import { FaPlus, FaTrash, FaSave, FaPaperPlane } from "react-icons/fa";
 
 interface Lesson {
   title: string;
@@ -25,7 +15,6 @@ interface Lesson {
 }
 
 const CourseCreator: React.FC = () => {
-  const { t } = useTranslation();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [courseId, setCourseId] = useState<string | null>(null);
@@ -117,25 +106,6 @@ const CourseCreator: React.FC = () => {
       ...prev,
       duration: prev.duration - prev.lessons[index].duration,
       lessons: prev.lessons.filter((_, i) => i !== index),
-    }));
-  };
-
-  const handleAddMaterial = () => {
-    const material = {
-      name: "새 자료",
-      url: "",
-      type: "link",
-    };
-    setNewLesson((prev) => ({
-      ...prev,
-      materials: [...prev.materials, material],
-    }));
-  };
-
-  const handleRemoveMaterial = (materialIndex: number) => {
-    setNewLesson((prev) => ({
-      ...prev,
-      materials: prev.materials.filter((_, i) => i !== materialIndex),
     }));
   };
 
