@@ -8,6 +8,7 @@ import {
   FaCheck,
   FaTimes,
   FaEye,
+  FaBook,
 } from "react-icons/fa";
 import axios from "axios";
 
@@ -37,17 +38,44 @@ interface Mentor {
   };
 }
 
+interface Course {
+  _id: string;
+  title: string;
+  description: string;
+  category: string;
+  level: string;
+  price: number;
+  duration: number;
+  status: "draft" | "pending" | "approved" | "rejected";
+  mentor: {
+    name: string;
+    email: string;
+  };
+  adminReview?: {
+    reviewedBy: {
+      name: string;
+    };
+    reviewedAt: string;
+    notes: string;
+  };
+  createdAt: string;
+}
+
 const AdminDashboard: React.FC = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [applications, setApplications] = useState<MentorApplication[]>([]);
   const [mentors, setMentors] = useState<Mentor[]>([]);
+  const [courses, setCourses] = useState<Course[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("applications");
   const [selectedApplication, setSelectedApplication] =
     useState<MentorApplication | null>(null);
+  const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
   const [reviewModal, setReviewModal] = useState(false);
+  const [courseReviewModal, setCourseReviewModal] = useState(false);
   const [adminNotes, setAdminNotes] = useState("");
+  const [courseAdminNotes, setCourseAdminNotes] = useState("");
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -66,7 +94,7 @@ const AdminDashboard: React.FC = () => {
       const token = localStorage.getItem("token");
       const headers = { Authorization: `Bearer ${token}` };
 
-      const [applicationsRes, mentorsRes] = await Promise.all([
+      const [applicationsRes, mentorsRes, coursesRes] = await Promise.all([
         axios.get(
           "https://ezkv3-production.up.railway.app/api/mentor/applications",
           { headers }
@@ -75,10 +103,15 @@ const AdminDashboard: React.FC = () => {
           "https://ezkv3-production.up.railway.app/api/mentor/mentors",
           { headers }
         ),
+        axios.get(
+          "https://ezkv3-production.up.railway.app/api/course/admin/all",
+          { headers }
+        ),
       ]);
 
       setApplications(applicationsRes.data.applications || []);
       setMentors(mentorsRes.data || []);
+      setCourses(coursesRes.data.courses || []);
       setLoading(false);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -106,11 +139,32 @@ const AdminDashboard: React.FC = () => {
     }
   };
 
+  const handleCourseReview = async (status: "approved" | "rejected") => {
+    if (!selectedCourse) return;
+
+    try {
+      const token = localStorage.getItem("token");
+      await axios.patch(
+        `https://ezkv3-production.up.railway.app/api/course/${selectedCourse._id}/review`,
+        { status, notes: courseAdminNotes },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      setCourseReviewModal(false);
+      setSelectedCourse(null);
+      setCourseAdminNotes("");
+      fetchData(); // 데이터 새로고침
+    } catch (error) {
+      console.error("Error reviewing course:", error);
+    }
+  };
+
   const getStatusBadge = (status: string) => {
     const statusConfig: Record<string, { color: string; text: string }> = {
       pending: { color: "bg-yellow-100 text-yellow-800", text: "대기중" },
       approved: { color: "bg-green-100 text-green-800", text: "승인됨" },
       rejected: { color: "bg-red-100 text-red-800", text: "거절됨" },
+      draft: { color: "bg-gray-100 text-gray-800", text: "초안" },
     };
     const config = statusConfig[status] || statusConfig.pending;
     return (
@@ -120,6 +174,27 @@ const AdminDashboard: React.FC = () => {
         {config.text}
       </span>
     );
+  };
+
+  const getCategoryLabel = (category: string) => {
+    const categories: Record<string, string> = {
+      programming: "프로그래밍",
+      design: "디자인",
+      business: "비즈니스",
+      language: "언어",
+      music: "음악",
+      other: "기타",
+    };
+    return categories[category] || category;
+  };
+
+  const getLevelLabel = (level: string) => {
+    const levels: Record<string, string> = {
+      beginner: "초급",
+      intermediate: "중급",
+      advanced: "고급",
+    };
+    return levels[level] || level;
   };
 
   if (loading) {
@@ -139,12 +214,12 @@ const AdminDashboard: React.FC = () => {
             관리자 대시보드
           </h1>
           <p className="text-gray-600 dark:text-gray-400">
-            멘토 신청 관리 및 사용자 관리
+            멘토 신청 관리, 강의 승인 및 사용자 관리
           </p>
         </div>
 
         {/* 통계 카드 */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
           <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 border border-gray-200 dark:border-gray-700">
             <div className="flex items-center justify-between">
               <div>
@@ -160,6 +235,25 @@ const AdminDashboard: React.FC = () => {
               </div>
               <div className="p-3 bg-yellow-100 dark:bg-yellow-900 rounded-lg">
                 <FaClock className="text-yellow-600 dark:text-yellow-400 text-xl" />
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 border border-gray-200 dark:border-gray-700">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                  대기중 강의
+                </p>
+                <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                  {
+                    courses.filter((course) => course.status === "pending")
+                      .length
+                  }
+                </p>
+              </div>
+              <div className="p-3 bg-orange-100 dark:bg-orange-900 rounded-lg">
+                <FaBook className="text-orange-600 dark:text-orange-400 text-xl" />
               </div>
             </div>
           </div>
@@ -184,10 +278,10 @@ const AdminDashboard: React.FC = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
-                  총 신청
+                  총 강의
                 </p>
                 <p className="text-2xl font-bold text-gray-900 dark:text-white">
-                  {applications.length}
+                  {courses.length}
                 </p>
               </div>
               <div className="p-3 bg-purple-100 dark:bg-purple-900 rounded-lg">
@@ -209,6 +303,16 @@ const AdminDashboard: React.FC = () => {
               }`}
             >
               멘토 신청 관리
+            </button>
+            <button
+              onClick={() => setActiveTab("courses")}
+              className={`flex-1 px-6 py-4 text-sm font-medium transition-colors ${
+                activeTab === "courses"
+                  ? "text-blue-600 border-b-2 border-blue-600"
+                  : "text-gray-500 hover:text-gray-700"
+              }`}
+            >
+              강의 승인 관리
             </button>
             <button
               onClick={() => setActiveTab("mentors")}
@@ -326,6 +430,116 @@ const AdminDashboard: React.FC = () => {
           </div>
         )}
 
+        {/* 강의 승인 관리 */}
+        {activeTab === "courses" && (
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
+            <div className="p-6">
+              <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+                강의 승인 관리
+              </h2>
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead>
+                    <tr className="border-b border-gray-200 dark:border-gray-700">
+                      <th className="text-left py-3 px-4 font-medium text-gray-700 dark:text-gray-300">
+                        강의명
+                      </th>
+                      <th className="text-left py-3 px-4 font-medium text-gray-700 dark:text-gray-300">
+                        멘토
+                      </th>
+                      <th className="text-left py-3 px-4 font-medium text-gray-700 dark:text-gray-300">
+                        카테고리
+                      </th>
+                      <th className="text-left py-3 px-4 font-medium text-gray-700 dark:text-gray-300">
+                        가격
+                      </th>
+                      <th className="text-left py-3 px-4 font-medium text-gray-700 dark:text-gray-300">
+                        상태
+                      </th>
+                      <th className="text-left py-3 px-4 font-medium text-gray-700 dark:text-gray-300">
+                        생성일
+                      </th>
+                      <th className="text-left py-3 px-4 font-medium text-gray-700 dark:text-gray-300">
+                        액션
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {courses.map((course) => (
+                      <tr
+                        key={course._id}
+                        className="border-b border-gray-100 dark:border-gray-700"
+                      >
+                        <td className="py-3 px-4">
+                          <div>
+                            <p className="font-medium text-gray-900 dark:text-white">
+                              {course.title}
+                            </p>
+                            <p className="text-sm text-gray-500 dark:text-gray-400">
+                              {course.description.substring(0, 50)}...
+                            </p>
+                          </div>
+                        </td>
+                        <td className="py-3 px-4">
+                          <div>
+                            <p className="font-medium text-gray-900 dark:text-white">
+                              {course.mentor?.name || "Unknown"}
+                            </p>
+                            <p className="text-sm text-gray-500 dark:text-gray-400">
+                              {course.mentor?.email || "No email"}
+                            </p>
+                          </div>
+                        </td>
+                        <td className="py-3 px-4 text-gray-900 dark:text-white">
+                          {getCategoryLabel(course.category)}
+                        </td>
+                        <td className="py-3 px-4 text-gray-900 dark:text-white">
+                          {course.price.toLocaleString()}원
+                        </td>
+                        <td className="py-3 px-4">
+                          {getStatusBadge(course.status)}
+                        </td>
+                        <td className="py-3 px-4 text-sm text-gray-500 dark:text-gray-400">
+                          {new Date(course.createdAt).toLocaleDateString()}
+                        </td>
+                        <td className="py-3 px-4">
+                          <div className="flex gap-2">
+                            <button
+                              onClick={() => {
+                                setSelectedCourse(course);
+                                setCourseReviewModal(true);
+                              }}
+                              className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                            >
+                              <FaEye />
+                            </button>
+                            {course.status === "pending" && (
+                              <>
+                                <button
+                                  onClick={() => handleCourseReview("approved")}
+                                  className="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors"
+                                >
+                                  <FaCheck />
+                                </button>
+                                <button
+                                  onClick={() => handleCourseReview("rejected")}
+                                  className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                                >
+                                  <FaTimes />
+                                </button>
+                              </>
+                            )}
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* 멘토 목록 */}
         {activeTab === "mentors" && (
           <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
@@ -374,7 +588,7 @@ const AdminDashboard: React.FC = () => {
         )}
       </div>
 
-      {/* 리뷰 모달 */}
+      {/* 멘토 신청 리뷰 모달 */}
       {reviewModal && selectedApplication && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white dark:bg-gray-800 rounded-xl p-6 max-w-2xl w-full mx-4 max-h-[80vh] overflow-y-auto">
@@ -450,6 +664,130 @@ const AdminDashboard: React.FC = () => {
               </button>
               <button
                 onClick={() => setReviewModal(false)}
+                className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+              >
+                취소
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 강의 리뷰 모달 */}
+      {courseReviewModal && selectedCourse && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white dark:bg-gray-800 rounded-xl p-6 max-w-2xl w-full mx-4 max-h-[80vh] overflow-y-auto">
+            <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+              강의 검토
+            </h3>
+
+            <div className="space-y-4 mb-6">
+              <div>
+                <h4 className="font-medium text-gray-900 dark:text-white mb-2">
+                  강의 정보
+                </h4>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  제목: {selectedCourse.title}
+                  <br />
+                  멘토: {selectedCourse.mentor?.name} (
+                  {selectedCourse.mentor?.email})
+                </p>
+              </div>
+
+              <div>
+                <h4 className="font-medium text-gray-900 dark:text-white mb-2">
+                  강의 설명
+                </h4>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  {selectedCourse.description}
+                </p>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <h4 className="font-medium text-gray-900 dark:text-white mb-2">
+                    카테고리
+                  </h4>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                    {getCategoryLabel(selectedCourse.category)}
+                  </p>
+                </div>
+                <div>
+                  <h4 className="font-medium text-gray-900 dark:text-white mb-2">
+                    난이도
+                  </h4>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                    {getLevelLabel(selectedCourse.level)}
+                  </p>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <h4 className="font-medium text-gray-900 dark:text-white mb-2">
+                    가격
+                  </h4>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                    {selectedCourse.price.toLocaleString()}원
+                  </p>
+                </div>
+                <div>
+                  <h4 className="font-medium text-gray-900 dark:text-white mb-2">
+                    총 강의 시간
+                  </h4>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                    {selectedCourse.duration}분
+                  </p>
+                </div>
+              </div>
+
+              {selectedCourse.adminReview && (
+                <div>
+                  <h4 className="font-medium text-gray-900 dark:text-white mb-2">
+                    이전 검토 정보
+                  </h4>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                    검토자: {selectedCourse.adminReview.reviewedBy?.name}
+                    <br />
+                    검토일:{" "}
+                    {new Date(
+                      selectedCourse.adminReview.reviewedAt
+                    ).toLocaleDateString()}
+                    <br />
+                    메모: {selectedCourse.adminReview.notes}
+                  </p>
+                </div>
+              )}
+
+              <div>
+                <h4 className="font-medium text-gray-900 dark:text-white mb-2">
+                  관리자 메모
+                </h4>
+                <textarea
+                  value={courseAdminNotes}
+                  onChange={(e) => setCourseAdminNotes(e.target.value)}
+                  className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                  rows={3}
+                  placeholder="검토 메모를 입력하세요..."
+                />
+              </div>
+            </div>
+
+            <div className="flex gap-3">
+              <button
+                onClick={() => handleCourseReview("approved")}
+                className="flex-1 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+              >
+                승인
+              </button>
+              <button
+                onClick={() => handleCourseReview("rejected")}
+                className="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+              >
+                거절
+              </button>
+              <button
+                onClick={() => setCourseReviewModal(false)}
                 className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
               >
                 취소

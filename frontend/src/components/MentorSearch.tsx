@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import {
   FaSearch,
@@ -8,7 +7,6 @@ import {
   FaDollarSign,
   FaGraduationCap,
   FaFilter,
-  FaMapMarkerAlt,
   FaLanguage,
 } from "react-icons/fa";
 
@@ -28,7 +26,6 @@ interface Mentor {
 }
 
 const MentorSearch: React.FC = () => {
-  const { t } = useTranslation();
   const navigate = useNavigate();
   const [mentors, setMentors] = useState<Mentor[]>([]);
   const [loading, setLoading] = useState(true);

@@ -9,6 +9,7 @@ import {
   FaEyeSlash,
   FaUpload,
   FaLink,
+  FaPaperPlane,
 } from "react-icons/fa";
 
 interface Lesson {
@@ -27,6 +28,7 @@ const CourseCreator: React.FC = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [courseId, setCourseId] = useState<string | null>(null);
   const [courseData, setCourseData] = useState({
     title: "",
     description: "",
@@ -166,14 +168,54 @@ const CourseCreator: React.FC = () => {
       const data = await response.json();
 
       if (data.success) {
-        alert("강의가 성공적으로 생성되었습니다!");
-        navigate("/mentor-dashboard");
+        setCourseId(data.course._id);
+        alert(
+          "강의가 성공적으로 생성되었습니다! (초안 상태)\n이제 제출 버튼을 눌러 관리자 검토를 요청하세요."
+        );
       } else {
         alert(data.message || "강의 생성에 실패했습니다.");
       }
     } catch (error) {
       console.error("강의 생성 오류:", error);
       alert("강의 생성 중 오류가 발생했습니다.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSubmitForReview = async () => {
+    if (!courseId) {
+      alert("먼저 강의를 생성해주세요.");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch(
+        `https://ezkv3-production.up.railway.app/api/course/${courseId}/submit`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const data = await response.json();
+
+      if (data.success) {
+        alert(
+          "강의가 관리자 검토를 위해 제출되었습니다!\n승인되면 학생들이 볼 수 있습니다."
+        );
+        navigate("/mentor-dashboard");
+      } else {
+        alert(data.message || "강의 제출에 실패했습니다.");
+      }
+    } catch (error) {
+      console.error("강의 제출 오류:", error);
+      alert("강의 제출 중 오류가 발생했습니다.");
     } finally {
       setLoading(false);
     }
@@ -191,6 +233,14 @@ const CourseCreator: React.FC = () => {
             <p className="text-gray-600 dark:text-gray-400">
               멘토링 경험을 바탕으로 온라인 강의를 만들어보세요!
             </p>
+            <div className="mt-4 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
+              <p className="text-sm text-blue-800 dark:text-blue-200">
+                <strong>📋 강의 승인 프로세스:</strong>
+                <br />
+                1. 강의 생성 (초안) → 2. 제출 (검토 대기) → 3. 관리자 승인 → 4.
+                공개
+              </p>
+            </div>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -553,18 +603,33 @@ const CourseCreator: React.FC = () => {
               {/* 액션 버튼 */}
               <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 border border-gray-200 dark:border-gray-700">
                 <div className="space-y-3">
-                  <button
-                    onClick={handleSubmit}
-                    disabled={loading}
-                    className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    {loading ? (
-                      <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
-                    ) : (
-                      <FaSave />
-                    )}
-                    {loading ? "생성 중..." : "강의 생성"}
-                  </button>
+                  {!courseId ? (
+                    <button
+                      onClick={handleSubmit}
+                      disabled={loading}
+                      className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      {loading ? (
+                        <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                      ) : (
+                        <FaSave />
+                      )}
+                      {loading ? "생성 중..." : "강의 생성"}
+                    </button>
+                  ) : (
+                    <button
+                      onClick={handleSubmitForReview}
+                      disabled={loading}
+                      className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      {loading ? (
+                        <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                      ) : (
+                        <FaPaperPlane />
+                      )}
+                      {loading ? "제출 중..." : "관리자 검토 제출"}
+                    </button>
+                  )}
                   <button
                     onClick={() => navigate("/mentor-dashboard")}
                     className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
