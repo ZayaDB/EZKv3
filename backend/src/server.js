@@ -5,6 +5,7 @@ import dotenv from "dotenv";
 import authRoutes from "./routes/auth.js";
 import mentorRoutes from "./routes/mentor.js";
 import courseRoutes from "./routes/course.js";
+import studentRoutes from "./routes/student.js";
 
 dotenv.config();
 
@@ -18,6 +19,7 @@ app.use(express.json());
 app.use("/api/auth", authRoutes);
 app.use("/api/mentor", mentorRoutes);
 app.use("/api/course", courseRoutes);
+app.use("/api/student", studentRoutes);
 
 // 기본 라우트
 app.get("/", (req, res) => {
