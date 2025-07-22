@@ -40,41 +40,61 @@ router.get("/dashboard", authenticateToken, async (req, res) => {
       });
     }
 
-    // 학생 정보 확인
-    if (user.role !== "student") {
-      return res.status(403).json({
-        success: false,
-        message: "학생만 접근할 수 있습니다.",
-      });
-    }
+    // 모든 역할이 접근 가능하도록 수정
+    // if (user.role !== "student") {
+    //   return res.status(403).json({
+    //     success: false,
+    //     message: "학생만 접근할 수 있습니다.",
+    //   });
+    // }
 
-    // 학생 통계 데이터
-    const dashboardData = {
-      totalSessions: user.studentInfo?.totalSessions || 0,
-      completedSessions: user.studentInfo?.completedSessions || 0,
-      upcomingSessions: 0, // 향후 세션 예약 시스템에서 가져올 예정
-      averageRating: user.studentInfo?.averageRating || 0,
-      totalHours: user.studentInfo?.totalHours || 0,
-      currentStreak: 0, // 향후 연속 학습 시스템에서 가져올 예정
-      nextSession: null, // 향후 세션 예약 시스템에서 가져올 예정
-      recentSessions: [], // 향후 세션 히스토리에서 가져올 예정
+    // 역할별 대시보드 데이터 구성
+    let dashboardData = {
+      totalSessions: 0,
+      completedSessions: 0,
+      upcomingSessions: 0,
+      averageRating: 0,
+      totalHours: 0,
+      currentStreak: 0,
+      nextSession: null,
+      recentSessions: [],
       progress: {
-        // 향후 학습 진행률 시스템에서 가져올 예정
         javascript: 0,
         react: 0,
         typescript: 0,
         nodejs: 0,
       },
-      enrolledCourses: [], // 수강 중인 강의 목록
-      completedCourses: [], // 완료한 강의 목록
+      enrolledCourses: [],
+      completedCourses: [],
     };
+
+    // 학생인 경우 studentInfo에서 데이터 가져오기
+    if (user.role === "student") {
+      dashboardData = {
+        ...dashboardData,
+        totalSessions: user.studentInfo?.totalSessions || 0,
+        completedSessions: user.studentInfo?.completedSessions || 0,
+        averageRating: user.studentInfo?.averageRating || 0,
+        totalHours: user.studentInfo?.totalHours || 0,
+      };
+    }
+
+    // 멘토인 경우 mentorInfo에서 데이터 가져오기 (향후 확장)
+    if (user.role === "mentor") {
+      // 멘토용 데이터는 향후 구현
+    }
+
+    // 관리자인 경우 adminInfo에서 데이터 가져오기 (향후 확장)
+    if (user.role === "admin") {
+      // 관리자용 데이터는 향후 구현
+    }
 
     res.json({
       success: true,
       data: dashboardData,
     });
   } catch (error) {
-    console.error("학생 대시보드 조회 오류:", error);
+    console.error("대시보드 조회 오류:", error);
     res.status(500).json({
       success: false,
       message: "대시보드 데이터 조회에 실패했습니다.",
@@ -83,7 +103,7 @@ router.get("/dashboard", authenticateToken, async (req, res) => {
   }
 });
 
-// 학생 프로필 업데이트
+// 프로필 업데이트 (모든 역할)
 router.put("/profile", authenticateToken, async (req, res) => {
   try {
     const { name, profileImage } = req.body;
@@ -97,13 +117,13 @@ router.put("/profile", authenticateToken, async (req, res) => {
       });
     }
 
-    // 학생만 접근 가능
-    if (user.role !== "student") {
-      return res.status(403).json({
-        success: false,
-        message: "학생만 접근할 수 있습니다.",
-      });
-    }
+    // 모든 역할이 접근 가능하도록 수정
+    // if (user.role !== "student") {
+    //   return res.status(403).json({
+    //     success: false,
+    //     message: "학생만 접근할 수 있습니다.",
+    //   });
+    // }
 
     // 업데이트할 필드들
     if (name) user.name = name;
@@ -121,10 +141,11 @@ router.put("/profile", authenticateToken, async (req, res) => {
         role: user.role,
         profileImage: user.profileImage,
         studentInfo: user.studentInfo,
+        mentorInfo: user.mentorInfo,
       },
     });
   } catch (error) {
-    console.error("학생 프로필 업데이트 오류:", error);
+    console.error("프로필 업데이트 오류:", error);
     res.status(500).json({
       success: false,
       message: "프로필 업데이트에 실패했습니다.",
