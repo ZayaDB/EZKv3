@@ -120,7 +120,7 @@ const courseSchema = new mongoose.Schema(
   }
 );
 
-// 강의 검색을 위한 인덱스
-courseSchema.index({ title: "text", description: "text", tags: "text" });
+// 강의 검색을 위한 인덱스 (언어 관련 오류 방지를 위해 제거)
+// courseSchema.index({ title: "text", description: "text", tags: "text" }, { default_language: "none" });
 
 export default mongoose.model("Course", courseSchema);
