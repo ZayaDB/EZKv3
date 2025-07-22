@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
@@ -14,10 +14,30 @@ import CourseDetail from "./components/CourseDetail";
 import MentorSearch from "./components/MentorSearch";
 
 const App: React.FC = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    setIsLoggedIn(!!token);
+
+    const handleStorageChange = () => {
+      const newToken = localStorage.getItem("token");
+      setIsLoggedIn(!!newToken);
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+    window.addEventListener("loginStateChanged", handleStorageChange);
+
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+      window.removeEventListener("loginStateChanged", handleStorageChange);
+    };
+  }, []);
+
   return (
     <div className="flex flex-col min-h-screen">
       <Header />
-      <main className="flex-1">
+      <main className={`flex-1 ${isLoggedIn ? "lg:ml-80" : ""}`}>
         <Routes>
           <Route path="/login" element={<LoginCard />} />
           <Route path="/register" element={<RegisterCard />} />
