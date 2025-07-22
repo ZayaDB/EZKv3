@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { useTranslation } from "react-i18next";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   FaArrowLeft,
@@ -46,7 +45,6 @@ interface Course {
 }
 
 const CourseDetail: React.FC = () => {
-  const { t } = useTranslation();
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const [course, setCourse] = useState<Course | null>(null);

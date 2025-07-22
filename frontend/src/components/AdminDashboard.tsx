@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import {
   FaUsers,
@@ -62,7 +61,6 @@ interface Course {
 }
 
 const AdminDashboard: React.FC = () => {
-  const { t } = useTranslation();
   const navigate = useNavigate();
   const [applications, setApplications] = useState<MentorApplication[]>([]);
   const [mentors, setMentors] = useState<Mentor[]>([]);
@@ -144,18 +142,40 @@ const AdminDashboard: React.FC = () => {
 
     try {
       const token = localStorage.getItem("token");
-      await axios.patch(
+      const user = JSON.parse(localStorage.getItem("user") || "{}");
+
+      console.log("Current user:", user);
+      console.log("User role:", user.role);
+      console.log("Reviewing course:", selectedCourse._id, "Status:", status);
+      console.log("Course current status:", selectedCourse.status);
+      console.log("Request payload:", { status, notes: courseAdminNotes });
+
+      const response = await axios.patch(
         `https://ezkv3-production.up.railway.app/api/course/${selectedCourse._id}/review`,
         { status, notes: courseAdminNotes },
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
-      setCourseReviewModal(false);
-      setSelectedCourse(null);
-      setCourseAdminNotes("");
-      fetchData(); // 데이터 새로고침
-    } catch (error) {
+      if (response.data.success) {
+        alert(
+          status === "approved"
+            ? "강의가 성공적으로 승인되었습니다!"
+            : "강의가 거절되었습니다."
+        );
+        setCourseReviewModal(false);
+        setSelectedCourse(null);
+        setCourseAdminNotes("");
+        fetchData(); // 데이터 새로고침
+      } else {
+        alert(response.data.message || "강의 검토에 실패했습니다.");
+      }
+    } catch (error: any) {
       console.error("Error reviewing course:", error);
+      console.error("Error response:", error.response?.data);
+      console.error("Error status:", error.response?.status);
+      alert(
+        error.response?.data?.message || "강의 검토 중 오류가 발생했습니다."
+      );
     }
   };
 
@@ -516,13 +536,19 @@ const AdminDashboard: React.FC = () => {
                             {course.status === "pending" && (
                               <>
                                 <button
-                                  onClick={() => handleCourseReview("approved")}
+                                  onClick={() => {
+                                    setSelectedCourse(course);
+                                    handleCourseReview("approved");
+                                  }}
                                   className="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors"
                                 >
                                   <FaCheck />
                                 </button>
                                 <button
-                                  onClick={() => handleCourseReview("rejected")}
+                                  onClick={() => {
+                                    setSelectedCourse(course);
+                                    handleCourseReview("rejected");
+                                  }}
                                   className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
                                 >
                                   <FaTimes />

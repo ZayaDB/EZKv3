@@ -123,6 +123,13 @@ const CourseCreator: React.FC = () => {
     setLoading(true);
     try {
       const token = localStorage.getItem("token");
+      const user = JSON.parse(localStorage.getItem("user") || "{}");
+
+      console.log("Creating course with data:", courseData);
+      console.log("Current user:", user);
+      console.log("User role:", user.role);
+      console.log("Token exists:", !!token);
+
       const response = await fetch(
         `https://ezkv3-production.up.railway.app/api/course`,
         {
@@ -135,7 +142,17 @@ const CourseCreator: React.FC = () => {
         }
       );
 
+      console.log("Response status:", response.status);
+      console.log("Response headers:", response.headers);
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error("Error response body:", errorText);
+        throw new Error(`HTTP ${response.status}: ${errorText}`);
+      }
+
       const data = await response.json();
+      console.log("Response data:", data);
 
       if (data.success) {
         setCourseId(data.course._id);
