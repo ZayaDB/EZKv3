@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
-import { FaUser, FaSun, FaMoon, FaBars } from "react-icons/fa";
+import { FaUser, FaSun, FaMoon, FaBars, FaTimes } from "react-icons/fa";
 // 국기 이미지 import
 import koreanFlag from "../assets/img_koreanFlag_02.jpg";
 import englandFlag from "../assets/england.svg";
@@ -19,6 +19,7 @@ const Header: React.FC<HeaderProps> = ({ showLNB, setShowLNB }) => {
   const [user, setUser] = useState<any>(null);
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
+  const [showMobileMenu, setShowMobileMenu] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -102,6 +103,11 @@ const Header: React.FC<HeaderProps> = ({ showLNB, setShowLNB }) => {
     return names[lng] || "한국어";
   };
 
+  const handleMobileMenuClick = (path: string) => {
+    navigate(path);
+    setShowMobileMenu(false);
+  };
+
   return (
     <>
       <header className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700 sticky top-0 z-50">
@@ -117,6 +123,20 @@ const Header: React.FC<HeaderProps> = ({ showLNB, setShowLNB }) => {
               </button>
             )}
 
+            {/* 모바일 메뉴 버튼 (로그인되지 않은 사용자용) */}
+            {!isLoggedIn && (
+              <button
+                onClick={() => setShowMobileMenu(!showMobileMenu)}
+                className="md:hidden p-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
+              >
+                {showMobileMenu ? (
+                  <FaTimes className="text-lg" />
+                ) : (
+                  <FaBars className="text-lg" />
+                )}
+              </button>
+            )}
+
             {/* 로고 */}
             <div
               className="flex items-center cursor-pointer"
@@ -128,24 +148,24 @@ const Header: React.FC<HeaderProps> = ({ showLNB, setShowLNB }) => {
             </div>
 
             {/* 네비게이션 메뉴 (데스크톱) */}
-            <nav className="hidden md:flex items-center space-x-8">
+            <nav className="hidden md:flex items-center space-x-6">
               <button
-                onClick={() => navigate("/mentor-search")}
-                className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                onClick={() => navigate("/study")}
+                className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors font-medium"
               >
-                {t("mentorSearch")}
+                {t("study")}
               </button>
-              <a
-                href="#"
-                className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+              <button
+                onClick={() => navigate("/community")}
+                className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors font-medium"
+              >
+                {t("community")}
+              </button>
+              <button
+                onClick={() => navigate("/freelancer")}
+                className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors font-medium"
               >
                 {t("freelancer")}
-              </a>
-              <button
-                onClick={() => navigate("/courses")}
-                className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
-              >
-                {t("courses")}
               </button>
             </nav>
 
@@ -250,18 +270,51 @@ const Header: React.FC<HeaderProps> = ({ showLNB, setShowLNB }) => {
                   >
                     {t("login")}
                   </button>
-                  <button
-                    onClick={() => navigate("/register")}
-                    className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-                  >
-                    {t("register")}
-                  </button>
                 </div>
               )}
             </div>
           </div>
         </div>
       </header>
+
+      {/* 모바일 메뉴 */}
+      {showMobileMenu && (
+        <div className="md:hidden fixed inset-0 bg-black bg-opacity-50 z-50">
+          <div className="fixed top-0 left-0 h-full w-80 bg-white dark:bg-gray-800 shadow-xl transform transition-transform duration-300 ease-in-out">
+            <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
+              <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
+                메뉴
+              </h2>
+              <button
+                onClick={() => setShowMobileMenu(false)}
+                className="p-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+              >
+                <FaTimes />
+              </button>
+            </div>
+            <nav className="p-6 space-y-4">
+              <button
+                onClick={() => handleMobileMenuClick("/study")}
+                className="w-full text-left py-3 px-4 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors font-medium"
+              >
+                📚 {t("study")}
+              </button>
+              <button
+                onClick={() => handleMobileMenuClick("/community")}
+                className="w-full text-left py-3 px-4 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors font-medium"
+              >
+                👥 {t("community")}
+              </button>
+              <button
+                onClick={() => handleMobileMenuClick("/freelancer")}
+                className="w-full text-left py-3 px-4 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors font-medium"
+              >
+                💼 {t("freelancer")}
+              </button>
+            </nav>
+          </div>
+        </div>
+      )}
     </>
   );
 };

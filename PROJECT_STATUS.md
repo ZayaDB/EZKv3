@@ -230,7 +230,7 @@ backend/
 
 ### Frontend
 
-- **메인**: https://ezkv3-frontend.vercel.app
+- **메인**: https://ezkorea.netlify.app
 - **강의 목록**: `/courses`
 - **멘토 검색**: `/mentor-search`
 - **대시보드**: `/dashboard`
@@ -264,9 +264,9 @@ npm start
 
 ```env
 # Backend (.env)
-MONGODB_URI=mongodb://...
-JWT_SECRET=your-secret-key
-PORT=5000
+MONGODB_URI=mongodb://mongo:IdrvybifDSdnMMugjedEEDQDGCAjLmfe@shuttle.proxy.rlwy.net:27226
+JWT_SECRET=your_jwt_secret_key
+PORT=4000
 ```
 
 ## 📝 개발 노트

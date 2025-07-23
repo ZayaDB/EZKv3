@@ -13,6 +13,13 @@ import CourseCreator from "./components/CourseCreator";
 import CourseList from "./components/CourseList";
 import CourseDetail from "./components/CourseDetail";
 import MentorSearch from "./components/MentorSearch";
+import Study from "./components/Study";
+import Life from "./components/Life";
+import Community from "./components/Community";
+import Freelancer from "./components/Freelancer";
+import Mentoring from "./components/Mentoring";
+import AIAssistant from "./components/AIAssistant";
+import Home from "./components/Home";
 
 const App: React.FC = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -58,7 +65,13 @@ const App: React.FC = () => {
             <Route path="/courses" element={<CourseList />} />
             <Route path="/course/:id" element={<CourseDetail />} />
             <Route path="/mentor-search" element={<MentorSearch />} />
-            <Route path="/" element={<div>홈 화면</div>} />
+            <Route path="/study" element={<Study />} />
+            <Route path="/life" element={<Life />} />
+            <Route path="/community" element={<Community />} />
+            <Route path="/freelancer" element={<Freelancer />} />
+            <Route path="/mentoring" element={<Mentoring />} />
+            <Route path="/ai-assistant" element={<AIAssistant />} />
+            <Route path="/" element={<Home />} />
           </Routes>
         </main>
       </div>

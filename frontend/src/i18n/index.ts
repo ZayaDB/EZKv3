@@ -120,6 +120,200 @@ const resources = {
         "Your mentor application has been submitted successfully. We will review it and get back to you soon.",
       reviewInProgress: "Review in progress...",
       mentorApplicationHint: "Apply to become a mentor and help others",
+
+      // New menu translations
+      study: "Study",
+      life: "Life",
+      community: "Community",
+      mentoring: "Mentoring",
+      aiAssistant: "AI Assistant",
+
+      // Home page translations
+      heroTitle: "Comprehensive Platform",
+      heroSubtitle: "For International Students in Korea",
+      heroDescription:
+        "From learning to daily life and community. We make your study abroad experience in Korea more convenient and enjoyable.",
+      getStarted: "Get Started",
+      exploreServices: "Explore Services",
+      whyEZKorea: "Why EZKorea?",
+      customizedService: "Customized Service",
+      customizedServiceDesc:
+        "We provide efficient help with services tailored to the actual needs of international students.",
+      multilingualSupport: "Multilingual Support",
+      multilingualSupportDesc:
+        "Supporting Korean, English, and Mongolian so all international students can use it conveniently.",
+      communityCentered: "Community Centered",
+      communityCenteredDesc:
+        "You can communicate and share information with other international students who have similar experiences.",
+
+      // Service descriptions
+      studyDescription:
+        "Course registration guide, academic tools, graduation requirements checklist",
+      lifeDescription:
+        "Housing search, part-time jobs, transportation/communication, hospitals/pharmacies",
+      communityDescription:
+        "Announcements, school groups, clubs/organizations, find friends",
+      freelancerDescription: "Job board, project registration, portfolio",
+      mentoringDescription: "Find mentors, course list, 1:1 consultation",
+      aiAssistantDescription:
+        "Chatbot consultation, personalized recommendations, real-time help",
+
+      // Study section
+      courseRegistrationGuide: "Course Registration Guide",
+      courseRegistrationDescription:
+        "Learn how to register for courses at Korean universities and get tips.",
+      academicTools: "Academic Tools",
+      academicToolsDescription:
+        "Use useful tools like GPA calculator, scheduler, and more.",
+      graduationRequirements: "Graduation Requirements Checklist",
+      graduationRequirementsDescription:
+        "Check and manage the requirements needed for graduation.",
+
+      // Life section
+      housingSearch: "Housing Search",
+      housingSearchDescription:
+        "Find various housing options like dormitories, studios, and homestays.",
+      partTimeJob: "Part-time Jobs",
+      partTimeJobDescription:
+        "Check part-time job information suitable for international students.",
+      transportation: "Transportation & Communication",
+      transportationDescription:
+        "Check essential life information like transportation cards and mobile carriers.",
+      hospital: "Hospitals & Pharmacies",
+      hospitalDescription: "Find foreigner-friendly hospitals and pharmacies.",
+
+      // Community section
+      announcements: "Announcements",
+      announcementsDescription: "Check important announcements and updates.",
+      schoolGroups: "School Groups",
+      schoolGroupsDescription:
+        "Communicate and share information with students from the same school.",
+      clubs: "Clubs & Organizations",
+      clubsDescription: "Join various clubs and organizations.",
+      findFriends: "Find Friends",
+      findFriendsDescription: "Find friends with similar interests.",
+      events: "Events & Meetups",
+      eventsDescription: "Participate in various events and meetups.",
+
+      // Freelancer section
+      jobBoard: "Job Board",
+      jobBoardDescription:
+        "Find various freelance opportunities like translation, interpretation, tutoring, and design.",
+      projectRegistration: "Project Registration",
+      projectRegistrationDescription:
+        "Register your projects and find suitable freelancers.",
+      portfolioDescription: "Showcase your work and highlight your experience.",
+      contractManagement: "Contract & Payment Management",
+      contractManagementDescription:
+        "Trade safely with our secure escrow system.",
+
+      // Mentoring section
+      findMentorDescription:
+        "Find a mentor that suits you and receive 1:1 consultation.",
+      courseList: "Course List",
+      courseListDescription:
+        "Take various courses in Korean, academics, culture, and more.",
+      consultation: "1:1 Consultation",
+      consultationDescription:
+        "Consult with mentors about personal concerns or questions.",
+
+      // AI Assistant section
+      chatbot: "Chatbot Consultation",
+      chatbotDescription: "Consult with AI chatbot anytime, 24/7.",
+      personalizedRecommendation: "Personalized Recommendations",
+      personalizedRecommendationDescription:
+        "AI analyzes and recommends services tailored to you.",
+      realTimeHelp: "Real-time Help",
+      realTimeHelpDescription: "Get real-time help in emergency situations.",
+
+      // Common buttons
+      useTool: "Use Tool",
+      viewChecklist: "View Checklist",
+      viewInfo: "View Info",
+      findHospital: "Find Hospital",
+      viewAnnouncements: "View Announcements",
+      findGroups: "Find Groups",
+      viewClubs: "View Clubs",
+      viewEvents: "View Events",
+      viewBoard: "View Board",
+      registerProject: "Register Project",
+      createPortfolio: "Create Portfolio",
+      manageTransactions: "Manage Transactions",
+      searchMentor: "Search Mentor",
+      viewCourses: "View Courses",
+      requestConsultation: "Request Consultation",
+      startChatbot: "Start Chatbot",
+      getRecommendations: "Get Recommendations",
+      requestHelp: "Request Help",
+
+      // Page specific translations
+      courseRegistrationGuideTitle: "Course Registration Guide",
+      courseRegistrationGuideDesc:
+        "Learn how to register for courses at Korean universities and get tips.",
+      academicToolsTitle: "Academic Tools",
+      academicToolsDesc:
+        "Use useful tools like GPA calculator, scheduler, and more.",
+      graduationRequirementsTitle: "Graduation Requirements Checklist",
+      graduationRequirementsDesc:
+        "Check and manage the requirements needed for graduation.",
+
+      // Life page
+      housingSearchTitle: "Housing Search",
+      housingSearchDesc:
+        "Find various housing options like dormitories, studios, and homestays.",
+      partTimeJobTitle: "Part-time Jobs",
+      partTimeJobDesc:
+        "Check part-time job information suitable for international students.",
+      transportationTitle: "Transportation & Communication",
+      transportationDesc:
+        "Check essential life information like transportation cards and mobile carriers.",
+      hospitalTitle: "Hospitals & Pharmacies",
+      hospitalDesc: "Find foreigner-friendly hospitals and pharmacies.",
+
+      // Community page
+      announcementsTitle: "Announcements",
+      announcementsDesc: "Check important announcements and updates.",
+      schoolGroupsTitle: "School Groups",
+      schoolGroupsDesc:
+        "Communicate and share information with students from the same school.",
+      clubsTitle: "Clubs & Organizations",
+      clubsDesc: "Join various clubs and organizations.",
+      findFriendsTitle: "Find Friends",
+      findFriendsDesc: "Find friends with similar interests.",
+      eventsTitle: "Events & Meetups",
+      eventsDesc: "Participate in various events and meetups.",
+
+      // Freelancer page
+      jobBoardTitle: "Job Board",
+      jobBoardDesc:
+        "Find various freelance opportunities like translation, interpretation, tutoring, and design.",
+      projectRegistrationTitle: "Project Registration",
+      projectRegistrationDesc:
+        "Register your projects and find suitable freelancers.",
+      portfolioTitle: "Portfolio",
+      portfolioDesc: "Showcase your work and highlight your experience.",
+      contractManagementTitle: "Contract & Payment Management",
+      contractManagementDesc: "Trade safely with our secure escrow system.",
+
+      // Mentoring page
+      findMentorTitle: "Find Mentor",
+      findMentorDesc:
+        "Find a mentor that suits you and receive 1:1 consultation.",
+      courseListTitle: "Course List",
+      courseListDesc:
+        "Take various courses in Korean, academics, culture, and more.",
+      consultationTitle: "1:1 Consultation",
+      consultationDesc:
+        "Consult with mentors about personal concerns or questions.",
+
+      // AI Assistant page
+      chatbotTitle: "Chatbot Consultation",
+      chatbotDesc: "Consult with AI chatbot anytime, 24/7.",
+      personalizedRecommendationTitle: "Personalized Recommendations",
+      personalizedRecommendationDesc:
+        "AI analyzes and recommends services tailored to you.",
+      realTimeHelpTitle: "Real-time Help",
+      realTimeHelpDesc: "Get real-time help in emergency situations.",
     },
   },
   ko: {
@@ -239,6 +433,187 @@ const resources = {
         "멘토 신청서가 성공적으로 제출되었습니다. 검토 후 곧 연락드리겠습니다.",
       reviewInProgress: "검토 중...",
       mentorApplicationHint: "멘토가 되어 다른 사람들을 도와주세요",
+
+      // New menu translations
+      study: "공부",
+      life: "생활",
+      community: "커뮤니티",
+      mentoring: "멘토링",
+      aiAssistant: "AI 어시스턴트",
+
+      // Home page translations
+      heroTitle: "EZKorea",
+      heroSubtitle: "한국 외국인 학생을 위한 종합 플랫폼",
+      heroDescription:
+        "학업부터 일상생활, 커뮤니티까지. 한국 유학 경험을 더 편리하고 즐겁게 만들어드립니다.",
+      getStarted: "시작하기",
+      exploreServices: "서비스 탐색",
+      whyEZKorea: "왜 EZKorea인가요?",
+      customizedService: "맞춤형 서비스",
+      customizedServiceDesc:
+        "국제 학생들의 실제 필요에 맞춰 효율적인 도움을 제공합니다.",
+      multilingualSupport: "다언어 지원",
+      multilingualSupportDesc:
+        "한국어, 영어, 몽골어를 지원하여 모든 국제 학생들이 편리하게 사용할 수 있습니다.",
+      communityCentered: "커뮤니티 중심",
+      communityCenteredDesc:
+        "비슷한 경험을 가진 다른 국제 학생들과 소통하고 정보를 공유할 수 있습니다.",
+
+      // Service descriptions
+      studyDescription: "수강 신청 가이드, 학업 도구, 졸업 요건 체크리스트",
+      lifeDescription: "주거 찾기, 아르바이트, 교통 & 통신, 병원 & 약국",
+      communityDescription: "공지사항, 학교 그룹, 동호회 & 단체, 친구 찾기",
+      freelancerDescription: "구인 게시판, 프로젝트 등록, 포트폴리오",
+      mentoringDescription: "멘토 찾기, 강의 목록, 1:1 상담",
+      aiAssistantDescription: "챗봇 상담, 개인화된 추천, 실시간 도움",
+
+      // Study section
+      courseRegistrationGuide: "수강 신청 가이드",
+      courseRegistrationDescription:
+        "한국 대학교 수강 신청 방법과 팁을 배워보세요.",
+      academicTools: "학업 도구",
+      academicToolsDescription:
+        "GPA 계산기, 스케줄러 등 유용한 도구를 사용해보세요.",
+      graduationRequirements: "졸업 요건 체크리스트",
+      graduationRequirementsDescription:
+        "졸업에 필요한 요건을 확인하고 관리해보세요.",
+
+      // Life section
+      housingSearch: "주거 찾기",
+      housingSearchDescription:
+        "기숙사, 원룸, 홈스테이 등 다양한 주거 옵션을 찾아보세요.",
+      partTimeJob: "아르바이트",
+      partTimeJobDescription:
+        "국제 학생을 위한 아르바이트 정보를 확인해보세요.",
+      transportation: "교통 & 통신",
+      transportationDescription:
+        "교통카드, 통신사 등 필수적인 생활 정보를 확인해보세요.",
+      hospital: "병원 & 약국",
+      hospitalDescription: "외국인 편의를 위한 병원과 약국을 찾아보세요.",
+
+      // Community section
+      announcements: "공지사항",
+      announcementsDescription: "중요한 공지사항과 업데이트를 확인해보세요.",
+      schoolGroups: "학교 그룹",
+      schoolGroupsDescription:
+        "같은 학교 학생들과 정보를 공유하고 소통해보세요.",
+      clubs: "동호회 & 단체",
+      clubsDescription: "다양한 동호회와 단체에 참여해보세요.",
+      findFriends: "친구 찾기",
+      findFriendsDescription: "비슷한 관심사를 가진 친구를 찾아보세요.",
+      events: "이벤트 & 모임",
+      eventsDescription: "다양한 이벤트와 모임에 참여해보세요.",
+
+      // Freelancer section
+      jobBoard: "구인 게시판",
+      jobBoardDescription:
+        "번역, 통역, 튜터링, 디자인 등 다양한 프리랜서 기회를 찾아보세요.",
+      projectRegistration: "프로젝트 등록",
+      projectRegistrationDescription:
+        "프로젝트를 등록하고 적합한 프리랜서를 찾아보세요.",
+      portfolioDescription: "작업물을 전시하고 경험을 강조해보세요.",
+      contractManagement: "계약 & 결제 관리",
+      contractManagementDescription: "안전한 에스크로 시스템으로 거래해보세요.",
+
+      // Mentoring section
+      findMentorDescription: "당신에게 맞는 멘토를 찾고 1:1 상담을 받아보세요.",
+      courseList: "강의 목록",
+      courseListDescription:
+        "한국어, 학업, 문화 등 다양한 강의를 수강해보세요.",
+      consultation: "1:1 상담",
+      consultationDescription:
+        "개인적인 걱정이나 질문에 대해 멘토들과 상담해보세요.",
+
+      // AI Assistant section
+      chatbot: "챗봇 상담",
+      chatbotDescription: "언제든지 AI 챗봇과 상담해보세요, 24/7.",
+      personalizedRecommendation: "개인화된 추천",
+      personalizedRecommendationDescription:
+        "AI가 당신에게 맞는 서비스를 분석하고 추천해드립니다.",
+      realTimeHelp: "실시간 도움",
+      realTimeHelpDescription: "비상 상황에 대한 실시간 도움을 받아보세요.",
+
+      // Common buttons
+      useTool: "도구 사용",
+      viewChecklist: "체크리스트 보기",
+      viewInfo: "정보 보기",
+      findHospital: "병원 찾기",
+      viewAnnouncements: "공지사항 보기",
+      findGroups: "그룹 찾기",
+      viewClubs: "동호회 보기",
+      viewEvents: "이벤트 보기",
+      viewBoard: "게시판 보기",
+      registerProject: "프로젝트 등록",
+      createPortfolio: "포트폴리오 생성",
+      manageTransactions: "Gүйлгээ удирдах",
+      searchMentor: "Ментор хайх",
+      viewCourses: "Хичээл харах",
+      requestConsultation: "Зөвлөгөө хүсэх",
+      startChatbot: "Чатбот эхлүүлэх",
+      getRecommendations: "Зөвлөмж авах",
+      requestHelp: "Тусламж хүсэх",
+
+      // Page specific translations
+      courseRegistrationGuideTitle: "수강 신청 가이드",
+      courseRegistrationGuideDesc:
+        "한국 대학교 수강 신청 방법과 팁을 배워보세요.",
+      academicToolsTitle: "학업 도구",
+      academicToolsDesc: "GPA 계산기, 스케줄러 등 유용한 도구를 사용해보세요.",
+      graduationRequirementsTitle: "졸업 요건 체크리스트",
+      graduationRequirementsDesc: "졸업에 필요한 요건을 확인하고 관리해보세요.",
+
+      // Life page
+      housingSearchTitle: "주거 찾기",
+      housingSearchDesc:
+        "기숙사, 원룸, 홈스테이 등 다양한 주거 옵션을 찾아보세요.",
+      partTimeJobTitle: "아르바이트",
+      partTimeJobDesc: "국제 학생을 위한 아르바이트 정보를 확인해보세요.",
+      transportationTitle: "교통 & 통신",
+      transportationDesc:
+        "교통카드, 통신사 등 필수적인 생활 정보를 확인해보세요.",
+      hospitalTitle: "병원 & 약국",
+      hospitalDesc: "외국인 편의를 위한 병원과 약국을 찾아보세요.",
+
+      // Community page
+      announcementsTitle: "공지사항",
+      announcementsDesc: "중요한 공지사항과 업데이트를 확인해보세요.",
+      schoolGroupsTitle: "학교 그룹",
+      schoolGroupsDesc: "같은 학교 학생들과 정보를 공유하고 소통해보세요.",
+      clubsTitle: "동호회 & 단체",
+      clubsDesc: "다양한 동호회와 단체에 참여해보세요.",
+      findFriendsTitle: "친구 찾기",
+      findFriendsDesc: "비슷한 관심사를 가진 친구를 찾아보세요.",
+      eventsTitle: "이벤트 & 모임",
+      eventsDesc: "다양한 이벤트와 모임에 참여해보세요.",
+
+      // Freelancer page
+      jobBoardTitle: "구인 게시판",
+      jobBoardDesc:
+        "번역, 통역, 튜터링, 디자인 등 다양한 프리랜서 기회를 찾아보세요.",
+      projectRegistrationTitle: "프로젝트 등록",
+      projectRegistrationDesc:
+        "프로젝트를 등록하고 적합한 프리랜서를 찾아보세요.",
+      portfolioTitle: "포트폴리오",
+      portfolioDesc: "작업물을 전시하고 경험을 강조해보세요.",
+      contractManagementTitle: "계약 & 결제 관리",
+      contractManagementDesc: "안전한 에스크로 시스템으로 거래해보세요.",
+
+      // Mentoring page
+      findMentorTitle: "멘토 찾기",
+      findMentorDesc: "당신에게 맞는 멘토를 찾고 1:1 상담을 받아보세요.",
+      courseListTitle: "강의 목록",
+      courseListDesc: "한국어, 학업, 문화 등 다양한 강의를 수강해보세요.",
+      consultationTitle: "1:1 상담",
+      consultationDesc: "개인적인 걱정이나 질문에 대해 멘토들과 상담해보세요.",
+
+      // AI Assistant page
+      chatbotTitle: "챗봇 상담",
+      chatbotDesc: "언제든지 AI 챗봇과 상담해보세요, 24/7.",
+      personalizedRecommendationTitle: "개인화된 추천",
+      personalizedRecommendationDesc:
+        "AI가 당신에게 맞는 서비스를 분석하고 추천해드립니다.",
+      realTimeHelpTitle: "실시간 도움",
+      realTimeHelpDesc: "비상 상황에 대한 실시간 도움을 받아보세요.",
     },
   },
   mn: {
@@ -361,6 +736,205 @@ const resources = {
         "Ментор болох хүсэлтээ амжилттай илгээлээ. Бид үүнийг шалгаад удахгүй танд холбогдох болно.",
       reviewInProgress: "Шалгалт явагдаж байна...",
       mentorApplicationHint: "Ментор болж бусдад тусална уу",
+
+      // New menu translations
+      study: "Сургалт",
+      life: "Амьдрал",
+      community: "Нийгэм",
+      mentoring: "Менторчлол",
+      aiAssistant: "AI туслах",
+
+      // Home page translations
+      heroTitle: "Цогц платформ",
+      heroSubtitle: "Солонгос дахь олон улсын оюутнуудад зориулсан",
+      heroDescription:
+        "Сургалтаас эхлээд өдөр тутмын амьдрал, нийгэм хүртэл. Солонгос дахь сургалтын туршлагыг илүү хялбар, таатай болгоно.",
+      getStarted: "Эхлэх",
+      exploreServices: "Үйлчилгээг судлах",
+      whyEZKorea: "Яагаад EZKorea вэ?",
+      customizedService: "Хувийн үйлчилгээ",
+      customizedServiceDesc:
+        "Олон улсын оюутнуудын бодит хэрэгцээнд тохируулсан үйлчилгээгээр үр дүнтэй тусламж үзүүлнэ.",
+      multilingualSupport: "Олон хэл дэмжлэг",
+      multilingualSupportDesc:
+        "Солонгос, Англи, Монгол хэл дэмжиж, бүх олон улсын оюутнууд хялбар ашиглах боломжтой.",
+      communityCentered: "Нийгэм төвтэй",
+      communityCenteredDesc:
+        "Ижил төрлийн туршлагатай бусад олон улсын оюутнуудтай холбоо тогтоож, мэдээлэл солилцох боломжтой.",
+
+      // Service descriptions
+      studyDescription:
+        "Хичээл бүртгэлийн заавар, сургалтын хэрэгслүүд, төгсөлтийн шаардлага",
+      lifeDescription:
+        "Орон сууц хайх, хагас цагийн ажил, тээвэр & холбоо, эмнэлэг & эмийн сан",
+      communityDescription:
+        "Зарлал, сургуулийн бүлгүүд, клуб & байгууллага, найз хайх",
+      freelancerDescription: "Ажлын самбар, төслийн бүртгэл, портфолио",
+      mentoringDescription: "Ментор хайх, хичээлийн жагсаалт, 1:1 зөвлөгөө",
+      aiAssistantDescription:
+        "Чатбот зөвлөгөө, хувийн зөвлөмж, бодит цагийн тусламж",
+
+      // Study section
+      courseRegistrationGuide: "Хичээл бүртгэлийн заавар",
+      courseRegistrationDescription:
+        "Солонгосын их сургуулиудад хичээл бүртгэх арга, зөвлөмжүүдийг сурна уу.",
+      academicTools: "Сургалтын хэрэгслүүд",
+      academicToolsDescription:
+        "GPA тооцоолуур, хуваарийн хэрэгсэл гэх мэт хэрэгтэй хэрэгслүүдийг ашиглана уу.",
+      graduationRequirements: "Төгсөлтийн шаардлага",
+      graduationRequirementsDescription:
+        "Төгсөлтийн шаардлагатай нөхцөлүүдийг шалгаж, удирдана уу.",
+
+      // Life section
+      housingSearch: "Орон сууц хайх",
+      housingSearchDescription:
+        "Дотуур байр, нэг өрөө, гэрт суух гэх мэт олон төрлийн орон сууцны сонголтыг олно уу.",
+      partTimeJob: "Хагас цагийн ажил",
+      partTimeJobDescription:
+        "Олон улсын оюутнуудад тохиромжтой хагас цагийн ажлын мэдээллийг шалгана уу.",
+      transportation: "Тээвэр & холбоо",
+      transportationDescription:
+        "Тээврийн карт, утасны оператор гэх мэт чухал амьдралын мэдээллийг шалгана уу.",
+      hospital: "Эмнэлэг & эмийн сан",
+      hospitalDescription:
+        "Гадаад иргэдэд тохиромжтой эмнэлэг, эмийн сангуудыг олно уу.",
+
+      // Community section
+      announcements: "Зарлал",
+      announcementsDescription: "Чухал зарлал, шинэчлэлтүүдийг шалгана уу.",
+      schoolGroups: "Сургуулийн бүлгүүд",
+      schoolGroupsDescription:
+        "Ижил сургуулийн оюутнуудтай мэдээлэл солилцож, холбоо тогтооно уу.",
+      clubs: "Клуб & байгууллага",
+      clubsDescription: "Олон төрлийн клуб, байгууллагад оролцоно уу.",
+      findFriends: "Найз хайх",
+      findFriendsDescription: "Ижил сонирхолтой найзуудаа олно уу.",
+      events: "Арга хэмжээ & уулзалт",
+      eventsDescription: "Олон төрлийн арга хэмжээ, уулзалтад оролцоно уу.",
+
+      // Freelancer section
+      jobBoard: "Ажлын самбар",
+      jobBoardDescription:
+        "Орчуулга, устгаарч, багшлах, дизайн гэх мэт олон төрлийн чөлөөт ажлын боломжуудыг олно уу.",
+      projectRegistration: "Төслийн бүртгэл",
+      projectRegistrationDescription:
+        "Төслөө бүртгэж, тохиромжтой чөлөөт ажилчид олно уу.",
+      portfolioDescription:
+        "Ажлын бүтээлээ үзүүлж, туршлагаа онцлон харуулна уу.",
+      contractManagement: "Гэрээ & төлбөрийн удирдлага",
+      contractManagementDescription:
+        "Аюулгүй эскро системээр аюулгүй наймаа хийнэ үү.",
+
+      // Mentoring section
+      findMentorDescription:
+        "Танд тохиромжтой менторыг олж, 1:1 зөвлөгөө авна уу.",
+      courseList: "Хичээлийн жагсаалт",
+      courseListDescription:
+        "Солонгос хэл, сургалт, соёл гэх мэт олон төрлийн хичээлүүдийг сурна уу.",
+      consultation: "1:1 зөвлөгөө",
+      consultationDescription:
+        "Хувийн санаа зовниж буй асуудлууд эсвэл асуултуудын талаар менторуудтай зөвлөлцөнө үү.",
+
+      // AI Assistant section
+      chatbot: "Чатбот зөвлөгөө",
+      chatbotDescription: "Хэзээ ч AI чатботтой зөвлөлцөнө үү, 24/7.",
+      personalizedRecommendation: "Хувийн зөвлөмж",
+      personalizedRecommendationDescription:
+        "AI танд тохиромжтой үйлчилгээг шинжилж, зөвлөмж өгнө.",
+      realTimeHelp: "Бодит цагийн тусламж",
+      realTimeHelpDescription:
+        "Яаралтай нөхцөл байдлын бодит цагийн тусламжийг авна уу.",
+
+      // Common buttons
+      useTool: "Хэрэгсэл ашиглах",
+      viewChecklist: "Жагсаалт харах",
+      viewInfo: "Мэдээлэл харах",
+      findHospital: "Эмнэлэг хайх",
+      viewAnnouncements: "Зарлал харах",
+      findGroups: "Бүлэг хайх",
+      viewClubs: "Клуб харах",
+      viewEvents: "Арга хэмжээ харах",
+      viewBoard: "Самбар харах",
+      registerProject: "Төсөл бүртгэх",
+      createPortfolio: "Портфолио үүсгэх",
+      manageTransactions: "Гүйлгээ удирдах",
+      searchMentor: "Ментор хайх",
+      viewCourses: "Хичээл харах",
+      requestConsultation: "Зөвлөгөө хүсэх",
+      startChatbot: "Чатбот эхлүүлэх",
+      getRecommendations: "Зөвлөмж авах",
+      requestHelp: "Тусламж хүсэх",
+
+      // Page specific translations
+      courseRegistrationGuideTitle: "Хичээл бүртгэлийн заавар",
+      courseRegistrationGuideDesc:
+        "Солонгосын их сургуулиудад хичээл бүртгэх арга, зөвлөмжүүдийг сурна уу.",
+      academicToolsTitle: "Сургалтын хэрэгслүүд",
+      academicToolsDesc:
+        "GPA тооцоолуур, хуваарийн хэрэгсэл гэх мэт хэрэгтэй хэрэгслүүдийг ашиглана уу.",
+      graduationRequirementsTitle: "Төгсөлтийн шаардлага",
+      graduationRequirementsDesc:
+        "Төгсөлтийн шаардлагатай нөхцөлүүдийг шалгаж, удирдана уу.",
+
+      // Life page
+      housingSearchTitle: "Орон сууц хайх",
+      housingSearchDesc:
+        "Дотуур байр, нэг өрөө, гэрт суух гэх мэт олон төрлийн орон сууцны сонголтыг олно уу.",
+      partTimeJobTitle: "Хагас цагийн ажил",
+      partTimeJobDesc:
+        "Олон улсын оюутнуудад тохиромжтой хагас цагийн ажлын мэдээллийг шалгана уу.",
+      transportationTitle: "Тээвэр & холбоо",
+      transportationDesc:
+        "Тээврийн карт, утасны оператор гэх мэт чухал амьдралын мэдээллийг шалгана уу.",
+      hospitalTitle: "Эмнэлэг & эмийн сан",
+      hospitalDesc:
+        "Гадаад иргэдэд тохиромжтой эмнэлэг, эмийн сангуудыг олно уу.",
+
+      // Community page
+      announcementsTitle: "Зарлал",
+      announcementsDesc: "Чухал зарлал, шинэчлэлтүүдийг шалгана уу.",
+      schoolGroupsTitle: "Сургуулийн бүлгүүд",
+      schoolGroupsDesc:
+        "Ижил сургуулийн оюутнуудтай мэдээлэл солилцож, холбоо тогтооно уу.",
+      clubsTitle: "Клуб & байгууллага",
+      clubsDesc: "Олон төрлийн клуб, байгууллагад оролцоно уу.",
+      findFriendsTitle: "Найз хайх",
+      findFriendsDesc: "Ижил сонирхолтой найзуудаа олно уу.",
+      eventsTitle: "Арга хэмжээ & уулзалт",
+      eventsDesc: "Олон төрлийн арга хэмжээ, уулзалтад оролцоно уу.",
+
+      // Freelancer page
+      jobBoardTitle: "Ажлын самбар",
+      jobBoardDesc:
+        "Орчуулга, устгаарч, багшлах, дизайн гэх мэт олон төрлийн чөлөөт ажлын боломжуудыг олно уу.",
+      projectRegistrationTitle: "Төслийн бүртгэл",
+      projectRegistrationDesc:
+        "Төслөө бүртгэж, тохиромжтой чөлөөт ажилчид олно уу.",
+      portfolioTitle: "Портфолио",
+      portfolioDesc: "Ажлын бүтээлээ үзүүлж, туршлагаа онцлон харуулна уу.",
+      contractManagementTitle: "Гэрээ & төлбөрийн удирдлага",
+      contractManagementDesc:
+        "Аюулгүй эскро системээр аюулгүй наймаа хийнэ үү.",
+
+      // Mentoring page
+      findMentorTitle: "Ментор хайх",
+      findMentorDesc: "Танд тохиромжтой менторыг олж, 1:1 зөвлөгөө авна уу.",
+      courseListTitle: "Хичээлийн жагсаалт",
+      courseListDesc:
+        "Солонгос хэл, сургалт, соёл гэх мэт олон төрлийн хичээлүүдийг сурна уу.",
+      consultationTitle: "1:1 зөвлөгөө",
+      consultationDesc:
+        "Хувийн санаа зовниж буй асуудлууд эсвэл асуултуудын талаар менторуудтай зөвлөлцөнө үү.",
+
+      // AI Assistant page
+      chatbotTitle: "Чатбот зөвлөгөө",
+      chatbotDesc: "Хэзээ ч AI чатботтой зөвлөлцөнө үү, 24/7.",
+      personalizedRecommendationTitle: "Хувийн зөвлөмж",
+      personalizedRecommendationDesc:
+        "AI танд тохиромжтой үйлчилгээг шинжилж, зөвлөмж өгнө.",
+      realTimeHelpTitle: "Бодит цагийн тусламж",
+      realTimeHelpDesc:
+        "Яаралтай нөхцөл байдлын бодит цагийн тусламжийг авна уу.",
     },
   },
 };
